@@ -1,0 +1,26 @@
+{
+  "name": "Aisle 9 - Price Listing App",
+  "short_name": "Aisle 9",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f3f4f6",
+  "theme_color": "#2563eb",
+  "description": "Share and compare grocery prices in St. Vincent & the Grenadines.",
+  "icons": [
+    {
+      "src": "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f6d2.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/192x192/1f6d2.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/512x512/1f6d2.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
