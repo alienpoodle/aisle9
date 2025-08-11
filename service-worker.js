@@ -6,13 +6,6 @@ const urlsToCache = [
     '/js/app.js',
     '/js/login.js',
     '/js/firebase-config.js',
-    'https://cdn.tailwindcss.com',
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css',
-    'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
-    'https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800',
-    'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js',
-    'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js',
-    'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js'
 ];
 
 // Install Event: Caches all static assets, gracefully handling errors
