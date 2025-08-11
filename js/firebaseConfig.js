@@ -1,9 +1,10 @@
 // Place your Firebase config here. This file should not be committed to version control.
 export const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyBxreWwMOTobAtG_w5-PoA7xv5_gErtcAE",
+  authDomain: "aisle-9-6f7d1.firebaseapp.com",
+  projectId: "aisle-9-6f7d1",
+  storageBucket: "aisle-9-6f7d1.appspot.com",
+  messagingSenderId: "620336806261",
+  appId: "1:620336806261:web:8986d4cf9ec39932337b3c",
+  measurementId: "G-RSH093YSFN"
 };
