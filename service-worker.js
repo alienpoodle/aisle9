@@ -1,11 +1,11 @@
-const CACHE_NAME = 'aisle9-cache-v1.2.2';
+const CACHE_NAME = 'aisle9-cache-v1.2.3';
 const urlsToCache = [
     '/',
     '/index.html',
     '/css/styles.css',
     '/js/app.js',
     '/js/login.js',
-    '/js/firebaseConfig.js',
+    '/js/firebase-config.js',
     'https://cdn.tailwindcss.com',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css',
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
@@ -15,16 +15,36 @@ const urlsToCache = [
     'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js'
 ];
 
-// Install Event: Caches all static assets
+// Install Event: Caches all static assets, gracefully handling errors
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
-                console.log('Opened cache and added all URLs to cache.');
-                return cache.addAll(urlsToCache);
+                console.log('Opened cache. Attempting to add URLs individually...');
+                // Use Promise.all with .map to add each URL individually,
+                // catching errors for each one so the whole operation doesn't fail.
+                return Promise.all(
+                    urlsToCache.map(url => {
+                        return fetch(url)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`Failed to fetch ${url} with status: ${response.status}`);
+                                }
+                                return cache.put(url, response);
+                            })
+                            .catch(error => {
+                                console.error(`Failed to cache ${url}:`, error);
+                                // Don't re-throw the error, so other files can still be cached.
+                            });
+                    })
+                );
+            })
+            .then(() => {
+                console.log('Installation complete. All available assets have been cached.');
             })
             .catch(error => {
-                console.error('Failed to add URLs to cache:', error);
+                console.error('Service Worker installation failed due to a critical error:', error);
+                // This catch block would only be reached if caches.open failed.
             })
     );
 });
