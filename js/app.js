@@ -1,14 +1,16 @@
-// Firebase imports
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-import { getFirestore, collection, addDoc, onSnapshot, query, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-// Import the Firebase configuration from the dedicated file
-import { firebaseConfig } from './firebaseConfig.js';
+// js/app.js
+// This script handles the main application logic, listening for authentication events.
 
-// Global variables for a standard PWA environment
-// Using the projectId as a logical app ID for the Firestore path
-const appId = "aisle-9-6f7d1"; 
-const initialAuthToken = null; // No custom token in a standard PWA setup
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+import { firebaseConfig } from './firebase-config.js';
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const appId = "aisle-9-6f7d1"; // Using the same app ID
 
 // Hardcoded list of supermarkets
 const supermarkets = [
@@ -44,11 +46,8 @@ const categories = [
 // Hardcoded list of item types
 const itemTypes = ["Local", "Imported"];
 
-// Initialize Firebase
-let app;
-let db;
-let auth;
 let userId = null;
+let username = null;
 let unsubscribeSnapshot = null; // To store the unsubscribe function for onSnapshot
 
 // Function to show custom message box
@@ -78,44 +77,6 @@ async function fetchWithBackoff(func, retries = 5, delay = 1000) {
     }
 }
 
-// Initialize Firebase and authenticate
-async function initializeFirebaseAndAuth() {
-    try {
-        app = initializeApp(firebaseConfig);
-        db = getFirestore(app);
-        auth = getAuth(app);
-
-        // Authenticate user
-        if (initialAuthToken) {
-            await fetchWithBackoff(() => signInWithCustomToken(auth, initialAuthToken));
-        } else {
-            await fetchWithBackoff(() => signInAnonymously(auth));
-        }
-
-        // Listen for auth state changes to get the user ID
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                userId = user.uid;
-                document.getElementById('user-id-display').innerText = `User ID: ${userId.substring(0, 8)}...`;
-                document.getElementById('user-id-display').classList.remove('hidden');
-                console.log("Authenticated with user ID:", userId);
-                // Once authenticated, start listening for item data
-                setupRealtimeItemListener();
-            } else {
-                userId = crypto.randomUUID(); // Fallback for unauthenticated or anonymous
-                document.getElementById('user-id-display').innerText = `Guest ID: ${userId.substring(0, 8)}...`;
-                document.getElementById('user-id-display').classList.remove('hidden');
-                console.log("Signed in anonymously with guest ID:", userId);
-                setupRealtimeItemListener();
-            }
-        });
-
-    } catch (error) {
-        console.error("Error initializing Firebase or authenticating:", error);
-        showMessageBox("Failed to initialize app. Please try again later.");
-    }
-}
-
 // DOM Elements
 const addItemBtn = document.getElementById('add-item-btn');
 const addItemModal = document.getElementById('add-item-modal');
@@ -142,6 +103,8 @@ const categoryFilterOptions = document.getElementById('category-filter-options')
 const typeFilterBtn = document.getElementById('type-filter-btn');
 const typeFilterOptions = document.getElementById('type-filter-options');
 
+// User Display
+const userDisplay = document.getElementById('user-display');
 
 // Loading and No Items Messages
 const loadingIndicator = document.getElementById('loading-indicator');
@@ -196,7 +159,6 @@ function showView(viewName) {
 tabListings.addEventListener('click', () => showView('cards'));
 tabComparisons.addEventListener('click', () => showView('comparison'));
 
-
 // Show/Hide Add Item Modal
 addItemBtn.addEventListener('click', () => {
     addItemModal.classList.remove('hidden');
@@ -220,7 +182,6 @@ closeItemDetailsModal.addEventListener('click', () => {
 okItemDetailsModal.addEventListener('click', () => {
     itemDetailsModal.classList.add('hidden');
 });
-
 
 // Add New Item to Firestore
 addItemForm.addEventListener('submit', async (e) => {
@@ -252,7 +213,7 @@ addItemForm.addEventListener('submit', async (e) => {
             store: itemStore,
             type: itemType,
             price: itemPrice,
-            submittedBy: userId,
+            submittedBy: username, // Use username instead of userId
             submissionDate: new Date().toISOString(), // ISO string for easy sorting and display
             upvotes: [], // Array of user IDs who upvoted
             downvotes: [] // Array of user IDs who downvoted
@@ -310,7 +271,7 @@ function renderItems(itemsToRender) {
                         <div class="flex items-center space-x-4">
                             <div class="flex items-center">
                                 <i class="fas fa-user mr-2"></i>
-                                <span>${item.submittedBy.substring(0, 8)}...</span>
+                                <span>${item.submittedBy}</span>
                             </div>
                             <div class="flex items-center">
                                 <i class="fas fa-calendar-alt mr-2"></i>
@@ -393,7 +354,7 @@ function renderComparisonItems(itemsToRender) {
             <div class="flex justify-between items-center mb-2">
                 <div class="flex-grow flex flex-col">
                     <span class="text-sm font-medium text-gray-700">${variant.store} <span class="text-xs text-gray-500">(${variant.type || 'N/A'})</span></span>
-                    <span class="text-xs text-gray-500">Submitted by: ${variant.submittedBy.substring(0, 8)}... on ${new Date(variant.submissionDate).toLocaleDateString()}</span>
+                    <span class="text-xs text-gray-500">Submitted by: ${variant.submittedBy} on ${new Date(variant.submissionDate).toLocaleDateString()}</span>
                 </div>
                 <div class="flex items-center space-x-2">
                     <span class="font-semibold text-2xl text-blue-600">XCD$${variant.price.toFixed(2)}</span>
@@ -617,7 +578,7 @@ document.addEventListener('click', async (e) => { // Listen on document for dyna
             }
         } else if (action === 'upvote' || action === 'downvote') {
             if (!userId) {
-                showMessageBox("Please wait for user authentication to complete before voting.");
+                showMessageBox("Please log in to vote.");
                 return;
             }
 
@@ -701,8 +662,27 @@ document.addEventListener('click', (event) => {
 // Event listeners for search
 searchInput.addEventListener('input', applyFiltersAndSearch);
 
-// Initialize Firebase and start the app
-window.onload = () => {
-    initializeFirebaseAndAuth();
+// Event listener for user authentication from login.js
+window.addEventListener('user-authenticated', (e) => {
+    userId = e.detail.userId;
+    username = e.detail.username;
+    userDisplay.textContent = `Welcome, ${username}`;
+    userDisplay.classList.remove('hidden');
+    
+    // Once authenticated, setup the item listener and app functionality
+    setupRealtimeItemListener();
     showView('cards'); // Default to item listings view on load
-};
+});
+
+// Event listener for user sign out
+window.addEventListener('user-signed-out', () => {
+    userId = null;
+    username = null;
+    if (unsubscribeSnapshot) {
+        unsubscribeSnapshot();
+        unsubscribeSnapshot = null;
+    }
+    userDisplay.classList.add('hidden');
+    itemCardsContainer.innerHTML = '';
+    comparisonCardsContainer.innerHTML = '';
+});
