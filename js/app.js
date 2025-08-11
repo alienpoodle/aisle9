@@ -3,7 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebas
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, onSnapshot, query, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 // Import the Firebase configuration from the dedicated file
-import { firebaseConfig } from './firebase-config.js';
+import { firebaseConfig } from './firebaseConfig.js';
 
 // Global variables for a standard PWA environment
 // Using the projectId as a logical app ID for the Firestore path
