@@ -258,6 +258,8 @@ function renderItems(itemsToRender) {
                             <i class="fas fa-store mr-2"></i>
                             <span>${item.store}</span>
                         </div>
+                    </div>
+                    <div class="flex items-center space-x-4 mb-2">
                         <div class="flex items-center">
                             <i class="fas fa-tag mr-2"></i>
                             <span>${item.type || 'N/A'}</span>

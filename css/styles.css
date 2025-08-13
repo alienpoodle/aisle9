@@ -59,6 +59,16 @@ body {
     }
 }
 
+/* Media query for desktop screens */
+@media (min-width: 1024px) {
+    #item-cards-container {
+        grid-template-columns: repeat(3, minmax(410px, 1fr));
+    }
+    .item-card {
+        min-width: 410px;
+    }
+}
+
 /* Vote button container */
 .vote-buttons-container {
     display: flex;
