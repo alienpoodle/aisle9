@@ -126,7 +126,6 @@ const detailItemDate = document.getElementById('detail-item-date');
 const detailItemType = document.getElementById('detail-item-type');
 const detailUpvotes = document.getElementById('detail-upvotes');
 const detailDownvotes = document.getElementById('detail-downvotes');
-// New element for the submitter's username
 const detailItemSubmittedBy = document.getElementById('detail-item-submitted-by');
 
 let allItems = [];
@@ -372,14 +371,6 @@ function renderComparisonItems(itemsToRender) {
                 </div>
                 <div class="flex items-center space-x-2">
                     <span class="font-semibold text-2xl text-blue-600">XCD$${variant.price.toFixed(2)}</span>
-                    <button data-id="${variant.id}" data-action="upvote" class="vote-btn text-green-500 hover:text-green-700 transition duration-150">
-                        <i class="fas fa-thumbs-up text-2xl"></i>
-                        <span class="vote-count">${variant.upvotes.length}</span>
-                    </button>
-                    <button data-id="${variant.id}" data-action="downvote" class="vote-btn downvote text-red-500 hover:text-red-700 transition duration-150">
-                        <i class="fas fa-thumbs-down text-2xl"></i>
-                        <span class="vote-count">${variant.downvotes.length}</span>
-                    </button>
                 </div>
             </div>
         `;
