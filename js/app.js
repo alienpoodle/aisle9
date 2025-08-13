@@ -244,7 +244,7 @@ function renderItems(itemsToRender) {
         card.innerHTML = `
             <div class="item-card flex-1">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold">
+                    <h3 class="text-xl font-semibold min-w-0">
                         <span class="clickable-item-name" data-item-id="${item.id}">${item.name}</span>
                     </h3>
                     <button data-id="${item.id}" data-action="share" class="share-btn text-blue-500 hover:text-blue-700 transition duration-150">
