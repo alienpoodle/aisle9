@@ -4,23 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aisle 9 - Price Listing App</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Google Fonts - Inter & Fira Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800">
-    
-    <!-- Link to our external stylesheet -->
+
     <link rel="stylesheet" href="css/styles.css">
-    
-    <!-- Link to the PWA manifest file -->
+
     <link rel="manifest" href="manifest.json">
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Login & Signup Page -->
     <section id="auth-page" class="flex items-center justify-center min-h-screen bg-gray-100 p-4">
         <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto transform transition-all duration-500">
             <h2 id="auth-title" class="text-4xl font-bold text-center text-gray-900 mb-6">Welcome!</h2>
@@ -28,8 +22,7 @@
                 <button class="auth-tab-btn active text-lg font-semibold px-4 py-2 border-b-2 border-blue-600 text-blue-600 transition-colors duration-300">Login</button>
                 <button class="auth-tab-btn text-lg font-semibold px-4 py-2 text-gray-500 hover:text-gray-700 transition-colors duration-300">Sign Up</button>
             </div>
-            
-            <!-- Login Form -->
+
             <form id="login-form" class="space-y-4">
                 <div>
                     <label for="login-email" class="block text-sm font-medium text-gray-700">Email Address</label>
@@ -42,7 +35,6 @@
                 <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:bg-blue-700 transition duration-300">Log In</button>
             </form>
 
-            <!-- Signup Form -->
             <form id="signup-form" class="space-y-4 hidden">
                 <div>
                     <label for="signup-username" class="block font-medium text-gray-700">Username</label>
@@ -54,7 +46,7 @@
                 </div>
                 <div>
                     <label for="signup-password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" id="signup-password" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">  
+                    <input type="password" id="signup-password" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
                 </div>
                 <div>
                     <label for="signup-confirm-password" class="block text-sm font-medium text-gray-700">Confirm Password</label>
@@ -65,12 +57,11 @@
         </div>
     </section>
 
-    <!-- App Container - Hidden by default -->
     <div id="app-container" class="hidden min-h-screen flex flex-col">
-        <!-- Header -->
         <header class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 shadow-xl">
             <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center">
                 <h1 class="text-3xl font-bold mb-2 sm:mb-0">Aisle 9 <i class="fas fa-shopping-basket ml-2"></i></h1>
+                <div class="flex items-center space-x-4 mt-2 sm:mt-0">
                     <span id="user-display" class="text-lg font-semibold bg-blue-700 px-3 py-1 rounded-full shadow-lg hidden"></span>
                     <button id="add-item-btn" class="bg-white text-blue-600 px-4 py-2 rounded-full shadow-lg hover:bg-blue-50 transition duration-300 flex items-center text-sm">
                         <i class="fas fa-plus-circle mr-2"></i> Add Item
@@ -78,12 +69,11 @@
                     <button id="logout-btn" class="bg-red-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-red-700 transition duration-300 flex items-center text-sm">
                         <i class="fas fa-sign-out-alt mr-2"></i> Log Out
                     </button>
+                </div>
             </div>
         </header>
 
-        <!-- Main Content Area -->
         <main class="container mx-auto p-4 flex-grow">
-            <!-- Search and Filter Section -->
             <section class="bg-white rounded-xl shadow-lg p-6 mb-6">
                 <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
                     <div class="relative w-full md:w-1/2">
@@ -91,51 +81,43 @@
                         <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg"></i>
                     </div>
                     <div class="w-full md:w-1/2 flex flex-wrap gap-2 justify-end">
-                        <!-- Multiselect Filter for Store -->
                         <div class="relative inline-block text-left w-full sm:w-auto z-40" id="store-filter-container">
                             <button type="button" class="inline-flex justify-between w-full rounded-lg border border-gray-300 shadow-md px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" id="store-filter-btn">
                                 Stores
                                 <i class="fas fa-chevron-down ml-2 -mr-1 text-gray-500 text-sm"></i>
                             </button>
                             <div class="origin-top-right absolute right-0 mt-2 w-full sm:w-64 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 hidden text-base" role="menu" aria-orientation="vertical" id="store-filter-options">
-                                <!-- Checkboxes will be populated here by JavaScript -->
-                            </div>
+                                </div>
                         </div>
-                        <!-- Multiselect Filter for Category -->
                         <div class="relative inline-block text-left w-full sm:w-auto z-30" id="category-filter-container">
                             <button type="button" class="inline-flex justify-between w-full rounded-lg border border-gray-300 shadow-md px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" id="category-filter-btn">
                                 Categories
                                 <i class="fas fa-chevron-down ml-2 -mr-1 text-gray-500 text-sm"></i>
                             </button>
                             <div class="origin-top-right absolute right-0 mt-2 w-full sm:w-64 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 hidden text-base" role="menu" aria-orientation="vertical" id="category-filter-options">
-                                <!-- Checkboxes will be populated here by JavaScript -->
-                            </div>
+                                </div>
                         </div>
-                         <!-- Multiselect Filter for Type -->
                         <div class="relative inline-block text-left w-full sm:w-auto z-20" id="type-filter-container">
                             <button type="button" class="inline-flex justify-between w-full rounded-lg border border-gray-300 shadow-md px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" id="type-filter-btn">
                                 Types
                                 <i class="fas fa-chevron-down ml-2 -mr-1 text-gray-500 text-sm"></i>
                             </button>
                             <div class="origin-top-right absolute right-0 mt-2 w-full sm:w-64 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 hidden text-base" role="menu" aria-orientation="vertical" id="type-filter-options">
-                                <!-- Checkboxes will be populated here by JavaScript -->
-                            </div>
+                                </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Tabs for Views -->
             <div class="flex bg-gray-100 rounded-t-lg shadow-md mb-4">
-                <button id="tab-listings" class="tab-btn active flex-1 px-4 py-3 text-center text-sm font-medium text-gray-700 hover:bg-gray-200 rounded-tl-lg transition duration-200">
+                <button id="tab-listings" class="tab-btn flex-1 px-4 py-3 text-center text-sm font-medium text-gray-700 hover:bg-gray-200 rounded-tl-lg transition duration-200 border-b-2 border-transparent">
                     Item Listings
                 </button>
-                <button id="tab-comparisons" class="tab-btn flex-1 px-4 py-3 text-center text-sm font-medium text-gray-700 hover:bg-gray-200 rounded-tr-lg transition duration-200">
+                <button id="tab-comparisons" class="tab-btn flex-1 px-4 py-3 text-center text-sm font-medium text-gray-700 hover:bg-gray-200 rounded-tr-lg transition duration-200 border-b-2 border-transparent">
                     Price Comparisons
                 </button>
             </div>
 
-            <!-- Item Listings Cards View -->
             <section id="item-listings-view" class="bg-white rounded-lg shadow-lg p-6">
                 <h2 class="text-2xl font-semibold mb-4 text-gray-800">Grocery Price Listings</h2>
                 <div id="loading-indicator" class="text-center text-gray-500 hidden text-sm">
@@ -145,13 +127,10 @@
                 <div id="no-items-message" class="text-center text-gray-500 hidden text-sm">
                     <p>No items found matching your criteria.</p>
                 </div>
-                <!-- Container for the new card design -->
-                <div id="item-cards-container" class="grocery-grid">
-                    <!-- Item cards will be populated here by JavaScript -->
-                </div>
+                <div id="item-cards-container" class="flex flex-wrap -mx-4">
+                    </div>
             </section>
 
-            <!-- Price Comparisons View -->
             <section id="price-comparison-view" class="bg-white rounded-lg shadow-lg p-6 hidden">
                 <h2 class="text-2xl font-semibold mb-4 text-gray-800">Price Comparisons</h2>
                 <div id="loading-comparison-indicator" class="text-center text-gray-500 hidden text-sm">
@@ -162,12 +141,10 @@
                     <p>No items found for comparison matching your criteria.</p>
                 </div>
                 <div id="comparison-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                    <!-- Comparison item cards will be populated here -->
-                </div>
+                    </div>
             </section>
         </main>
 
-        <!-- Add Item Modal -->
         <div id="add-item-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden">
             <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg mx-4">
                 <div class="flex justify-between items-center mb-6">
@@ -215,11 +192,9 @@
             </div>
         </div>
 
-        <!-- Item Details Modal -->
         <div id="item-details-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden">
             <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg mx-4">
                 <div class="flex flex-col gap-6">
-                    <!-- Content Section -->
                     <div class="flex-grow">
                         <div class="flex justify-between items-start mb-4">
                             <h3 id="detail-item-name" class="text-3xl font-bold text-gray-900"></h3>
@@ -247,7 +222,6 @@
             </div>
         </div>
 
-        <!-- Message Box (for alerts/confirmations) -->
         <div id="message-box" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden">
             <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm mx-4 text-center">
                 <p id="message-text" class="text-base font-medium text-gray-800 mb-4"></p>
@@ -256,7 +230,6 @@
         </div>
     </div>
 
-    <!-- Script to register the service worker -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -271,7 +244,6 @@
         }
     </script>
 
-    <!-- Link to our external scripts -->
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/login.js"></script>
     <script type="module" src="js/app.js"></script>
