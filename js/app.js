@@ -238,6 +238,10 @@ function renderItems(itemsToRender) {
     loadingIndicator.classList.add('hidden');
 
     itemsToRender.forEach(item => {
+        const isConfirmed = item.upvotes.length > item.downvotes.length;
+        const confirmationText = isConfirmed ? 'Confirmed True' : 'Confirmed False';
+        const confirmationColor = isConfirmed ? 'text-green-500' : 'text-red-500';
+
         const card = document.createElement('div');
         // Corrected: Using more robust and responsive Tailwind classes for the card
         card.className = 'w-full md:w-1/2 lg:w-1/3 p-4 flex';
@@ -252,6 +256,10 @@ function renderItems(itemsToRender) {
                     </button>
                 </div>
                 <span class="text-3xl font-bold text-blue-600">XCD$${item.price.toFixed(2)}</span>
+                <div class="flex items-center text-sm font-medium mt-2">
+                    <i class="fas fa-check-circle mr-2 ${confirmationColor}"></i>
+                    <span class="${confirmationColor}">${confirmationText} (${Math.abs(item.upvotes.length - item.downvotes.length)} votes)</span>
+                </div>
                 <div class="flex flex-col mt-4 text-sm text-gray-500">
                     <div class="flex items-center space-x-4 mb-2">
                         <div class="flex items-center">
@@ -345,11 +353,22 @@ function renderComparisonItems(itemsToRender) {
         const comparisonCard = document.createElement('div');
         comparisonCard.className = 'bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300';
         
-        let variantsHtml = group.variants.map(variant => `
+        let variantsHtml = group.variants.map(variant => {
+            const isConfirmed = variant.upvotes.length > variant.downvotes.length;
+            const confirmationText = isConfirmed ? 'Confirmed True' : 'Confirmed False';
+            const confirmationColor = isConfirmed ? 'text-green-500' : 'text-red-500';
+
+            return `
             <div class="flex justify-between items-center mb-2">
                 <div class="flex-grow flex flex-col">
                     <span class="text-sm font-medium text-gray-700">${variant.store} <span class="text-xs text-gray-500">(${variant.type || 'N/A'})</span></span>
-                    <span class="text-xs text-gray-500">Submitted by: ${variant.submittedBy} on ${new Date(variant.submissionDate).toLocaleDateString()}</span>
+                    <div class="flex items-center text-xs text-gray-500 mt-1">
+                        <span>Submitted by: ${variant.submittedBy} on ${new Date(variant.submissionDate).toLocaleDateString()}</span>
+                        <div class="ml-2 flex items-center">
+                            <i class="fas fa-check-circle mr-1 ${confirmationColor}"></i>
+                            <span class="${confirmationColor} font-medium">${confirmationText} by (${Math.abs(variant.upvotes.length - variant.downvotes.length)} votes)</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="flex items-center space-x-2">
                     <span class="font-semibold text-2xl text-blue-600">XCD$${variant.price.toFixed(2)}</span>
@@ -363,7 +382,8 @@ function renderComparisonItems(itemsToRender) {
                     </button>
                 </div>
             </div>
-        `).join('');
+        `;
+        }).join('');
 
         comparisonCard.innerHTML = `
             <div class="flex justify-between items-center mb-4 border-b pb-2">
