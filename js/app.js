@@ -80,8 +80,18 @@ const addItemModal = document.getElementById('add-item-modal');
 const closeAddItemModal = document.getElementById('close-add-item-modal');
 const cancelAddItem = document.getElementById('cancel-add-item');
 const addItemForm = document.getElementById('add-item-form');
-const addItemStoreSelect = document.getElementById('item-store');
-const addItemCategorySelect = document.getElementById('item-category');
+// Removed the old select elements
+// const addItemStoreSelect = document.getElementById('item-store');
+// const addItemCategorySelect = document.getElementById('item-category');
+
+// New searchable dropdown elements
+const itemCategoryInput = document.getElementById('item-category-input');
+const itemCategoryDropdown = document.getElementById('item-category-dropdown');
+const itemCategoryHidden = document.getElementById('item-category');
+
+const itemStoreInput = document.getElementById('item-store-input');
+const itemStoreDropdown = document.getElementById('item-store-dropdown');
+const itemStoreHidden = document.getElementById('item-store');
 
 // View Containers
 const itemListingsView = document.getElementById('item-listings-view');
@@ -160,6 +170,9 @@ tabComparisons.addEventListener('click', () => showView('comparison'));
 // Show/Hide Add Item Modal
 addItemBtn.addEventListener('click', () => {
     addItemModal.classList.remove('hidden');
+    // Clear and populate searchable dropdowns on modal open
+    setupSearchableDropdown(itemCategoryInput, itemCategoryDropdown, itemCategoryHidden, categories);
+    setupSearchableDropdown(itemStoreInput, itemStoreDropdown, itemStoreHidden, supermarkets);
 });
 
 closeAddItemModal.addEventListener('click', () => {
@@ -187,8 +200,8 @@ addItemForm.addEventListener('submit', async (e) => {
 
     const itemName = document.getElementById('item-name').value.trim();
     const itemDescription = document.getElementById('item-description').value.trim();
-    const itemCategory = document.getElementById('item-category').value.trim();
-    const itemStore = document.getElementById('item-store').value.trim();
+    const itemCategory = itemCategoryHidden.value;
+    const itemStore = itemStoreHidden.value;
     const itemType = document.getElementById('item-type').value;
     const itemPrice = parseFloat(document.getElementById('item-price').value);
 
@@ -224,6 +237,51 @@ addItemForm.addEventListener('submit', async (e) => {
         showMessageBox("Failed to add item. Please try again.");
     }
 });
+
+// Function to handle the searchable dropdown logic
+function setupSearchableDropdown(inputElement, dropdownElement, hiddenInputElement, optionsList) {
+    const renderOptions = (filter = '') => {
+        dropdownElement.innerHTML = '';
+        const filteredOptions = optionsList.filter(option => option.toLowerCase().includes(filter.toLowerCase()));
+
+        if (filteredOptions.length === 0) {
+            const noResults = document.createElement('div');
+            noResults.className = 'px-4 py-2 text-gray-500';
+            noResults.textContent = 'No results found';
+            dropdownElement.appendChild(noResults);
+        } else {
+            filteredOptions.forEach(option => {
+                const item = document.createElement('div');
+                item.className = 'cursor-pointer px-4 py-2 hover:bg-blue-100';
+                item.textContent = option;
+                item.addEventListener('click', () => {
+                    inputElement.value = option;
+                    hiddenInputElement.value = option;
+                    dropdownElement.classList.add('hidden');
+                });
+                dropdownElement.appendChild(item);
+            });
+        }
+        dropdownElement.classList.remove('hidden');
+    };
+
+    inputElement.addEventListener('input', (e) => {
+        renderOptions(e.target.value);
+    });
+
+    inputElement.addEventListener('focus', () => {
+        renderOptions(inputElement.value);
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!dropdownElement.contains(e.target) && e.target !== inputElement) {
+            dropdownElement.classList.add('hidden');
+        }
+    });
+
+    // Initial render on focus
+    inputElement.addEventListener('focus', () => renderOptions(inputElement.value));
+}
 
 // Function to render items as individual cards using the new CSS
 function renderItems(itemsToRender) {
@@ -365,7 +423,7 @@ function renderComparisonItems(itemsToRender) {
                         <span>Submitted by: ${variant.submittedBy} on ${new Date(variant.submissionDate).toLocaleDateString()}</span>
                         <div class="ml-2 flex items-center">
                             <i class="fas fa-check-circle mr-1 ${confirmationColor}"></i>
-                            <span class="${confirmationColor} font-medium">${confirmationText} by (${Math.abs(variant.upvotes.length - variant.downvotes.length)} votes)</span>
+                            <span class="${confirmationColor} font-medium">${confirmationText} (${Math.abs(variant.upvotes.length - variant.downvotes.length)} votes)</span>
                         </div>
                     </div>
                 </div>
@@ -417,23 +475,8 @@ function getSelectedValues(containerId) {
 
 // Populate filter dropdowns and the store/category datalists
 function populateUIFromData() {
-    // Populate store select dropdown (for add form)
-    addItemStoreSelect.innerHTML = '<option value="" disabled selected>Select Store</option>';
-    supermarkets.forEach(store => {
-        const option = document.createElement('option');
-        option.value = store;
-        option.textContent = store;
-        addItemStoreSelect.appendChild(option);
-    });
-
-    // Populate category select dropdown (for add form)
-    addItemCategorySelect.innerHTML = '<option value="" disabled selected>Select Category</option>';
-    categories.forEach(category => {
-        const option = document.createElement('option');
-        option.value = category;
-        option.textContent = category;
-        addItemCategorySelect.appendChild(option);
-    });
+    // We no longer populate the add item form's select menus here,
+    // as they are now handled by the new searchable dropdowns.
 
     // Populate multi-select filter options with checkboxes
     populateFilterCheckboxes(storeFilterOptions, supermarkets);

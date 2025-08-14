@@ -1,77 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aisle 9 - Price Listing App</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aisle 9 - Price Listing App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800">
 
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
 
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <section id="auth-page" class="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto transform transition-all duration-500">
-            <h2 id="auth-title" class="text-4xl font-bold text-center text-gray-900 mb-6">Welcome!</h2>
-            <div id="auth-toggle" class="flex justify-center mb-6">
-                <button class="auth-tab-btn active text-lg font-semibold px-4 py-2 border-b-2 border-blue-600 text-blue-600 transition-colors duration-300">Login</button>
-                <button class="auth-tab-btn text-lg font-semibold px-4 py-2 text-gray-500 hover:text-gray-700 transition-colors duration-300">Sign Up</button>
-            </div>
+    <section id="auth-page" class="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto transform transition-all duration-500">
+            <h2 id="auth-title" class="text-4xl font-bold text-center text-gray-900 mb-6">Welcome!</h2>
+            <div id="auth-toggle" class="flex justify-center mb-6">
+                <button class="auth-tab-btn active text-lg font-semibold px-4 py-2 border-b-2 border-blue-600 text-blue-600 transition-colors duration-300">Login</button>
+                <button class="auth-tab-btn text-lg font-semibold px-4 py-2 text-gray-500 hover:text-gray-700 transition-colors duration-300">Sign Up</button>
+            </div>
 
-            <form id="login-form" class="space-y-4">
-                <div>
-                    <label for="login-email" class="block text-sm font-medium text-gray-700">Email Address</label>
-                    <input type="email" id="login-email" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
-                </div>
-                <div>
-                    <label for="login-password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" id="login-password" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
-                </div>
-                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:bg-blue-700 transition duration-300">Log In</button>
-            </form>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label for="login-email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                    <input type="email" id="login-email" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
+                </div>
+                <div>
+                    <label for="login-password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="login-password" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:bg-blue-700 transition duration-300">Log In</button>
+            </form>
 
-            <form id="signup-form" class="space-y-4 hidden">
-                <div>
-                    <label for="signup-username" class="block font-medium text-gray-700">Username</label>
-                    <input type="text" id="signup-username" name="signup-username" required minlength="3" maxlength="24" pattern="[A-Za-z0-9_\-]+" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Choose a username">
-                </div>
-                <div>
-                    <label for="signup-email" class="block text-sm font-medium text-gray-700">Email Address</label>
-                    <input type="email" id="signup-email" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
-                </div>
-                <div>
-                    <label for="signup-password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" id="signup-password" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
-                </div>
-                <div>
-                    <label for="signup-confirm-password" class="block text-sm font-medium text-gray-700">Confirm Password</label>
-                    <input type="password" id="signup-confirm-password" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
-                </div>
-                <button type="submit" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:bg-green-700 transition duration-300">Sign Up</button>
-            </form>
-        </div>
-    </section>
+            <form id="signup-form" class="space-y-4 hidden">
+                <div>
+                    <label for="signup-username" class="block font-medium text-gray-700">Username</label>
+                    <input type="text" id="signup-username" name="signup-username" required minlength="3" maxlength="24" pattern="[A-Za-z0-9_\-]+" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Choose a username">
+                </div>
+                <div>
+                    <label for="signup-email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                    <input type="email" id="signup-email" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
+                </div>
+                <div>
+                    <label for="signup-password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="signup-password" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
+                </div>
+                <div>
+                    <label for="signup-confirm-password" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                    <input type="password" id="signup-confirm-password" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
+                </div>
+                <button type="submit" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:bg-green-700 transition duration-300">Sign Up</button>
+            </form>
+        </div>
+    </section>
 
-    <div id="app-container" class="hidden min-h-screen flex flex-col">
-        <header class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 shadow-xl">
-            <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center">
-                <h1 class="text-3xl font-bold mb-2 sm:mb-0">Aisle 9 <i class="fas fa-shopping-basket ml-2"></i></h1>
-                <div class="flex items-center space-x-4 mt-2 sm:mt-0">
-                    <span id="user-display" class="text-lg font-semibold bg-blue-700 px-3 py-1 rounded-full shadow-lg hidden"></span>
-                    <button id="add-item-btn" class="bg-white text-blue-600 px-4 py-2 rounded-full shadow-lg hover:bg-blue-50 transition duration-300 flex items-center text-sm">
-                        <i class="fas fa-plus-circle mr-2"></i> Add Item
-                    </button>
-                    <button id="logout-btn" class="bg-red-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-red-700 transition duration-300 flex items-center text-sm">
-                        <i class="fas fa-sign-out-alt mr-2"></i> Log Out
-                    </button>
-                </div>
-            </div>
-        </header>
+    <div id="app-container" class="hidden min-h-screen flex flex-col">
+        <header class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 shadow-xl">
+            <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center">
+                <h1 class="text-3xl font-bold mb-2 sm:mb-0">Aisle 9 <i class="fas fa-shopping-basket ml-2"></i></h1>
+                <div class="flex items-center space-x-4 mt-2 sm:mt-0">
+                    <span id="user-display" class="text-lg font-semibold bg-blue-700 px-3 py-1 rounded-full shadow-lg hidden"></span>
+                    <button id="add-item-btn" class="bg-white text-blue-600 px-4 py-2 rounded-full shadow-lg hover:bg-blue-50 transition duration-300 flex items-center text-sm">
+                        <i class="fas fa-plus-circle mr-2"></i> Add Item
+                    </button>
+                    <button id="logout-btn" class="bg-red-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-red-700 transition duration-300 flex items-center text-sm">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Log Out
+                    </button>
+                </div>
+            </div>
+        </header>
 
         <main class="container mx-auto p-4 flex-grow">
             <section class="bg-white rounded-xl shadow-lg p-6 mb-6">
