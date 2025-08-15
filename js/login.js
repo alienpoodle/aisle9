@@ -82,7 +82,6 @@ signupForm.addEventListener('submit', async (e) => {
     const email = signupForm['signup-email'].value;
     const password = signupForm['signup-password'].value;
     const confirmPassword = signupForm['signup-confirm-password'].value;
-    const username = signupForm['signup-username'].value.trim();
 
     if (password !== confirmPassword) {
         showMessageBox("Passwords do not match.");
@@ -93,19 +92,16 @@ signupForm.addEventListener('submit', async (e) => {
         showMessageBox("Password must be 12+ characters and contain at least one uppercase letter, one lowercase letter, one number, and one symbol.");
         return;
     }
-    if (!username || username.length < 3 || username.length > 24) {
-        showMessageBox("Username must be 3-24 characters and contain only letters, numbers, underscores, or hyphens.");
-        return;
-    }
 
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
+        const generatedUsername = generateRandomUsername();
 
         // Store the username in Firestore
         const userRef = doc(db, `artifacts/${appId}/public/data/users`, user.uid);
         await setDoc(userRef, {
-            username: username,
+            username: generatedUsername,
             email: user.email,
             createdAt: new Date().toISOString()
         });
