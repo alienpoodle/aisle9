@@ -338,11 +338,14 @@ function renderItems(itemsToRender) {
                     <h3 class="text-xl font-semibold min-w-0">
                         <span class="clickable-item-name" data-item-id="${item.id}">${item.name}</span>
                     </h3>
-                    <div class="group relative inline-block h-9 w-9 overflow-hidden rounded-full bg-gray-900/80 transition-[width] duration-200 hover:w-[160px] hover:bg-gradient-to-r from-blue-500 to-indigo-600">
-                        </i><i class="fas fa-ellipsis"></i>
+                    <div class="group relative inline-block h-9 w-9 overflow-hidden rounded-full bg-blue-500 transition-[width] duration-200 hover:w-[160px] hover:bg-gradient-to-r from-blue-500 to-indigo-600">
+                        <div class="absolute inset-0 flex items-center justify-center transition-opacity duration-200 group-hover:opacity-0">
+                            <i class="fas fa-ellipsis text-white text-xl"></i>
+                        </div>
+                        
                         <ul class="absolute inset-0 flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0">
                             <li class="p-2 transition-opacity duration-200">
-                                <button data-id="${item.id}" data-action="share" class="share-btn text-white/80 hover:text-blue-700 transition duration-150" aria-label="share">
+                                <button data-id="${item.id}" data-action="share" class="share-btn text-white/80 hover:text-white transition duration-150" aria-label="share">
                                     <i class="fas fa-share-alt text-2xl"></i>
                                 </button>
                             </li>
@@ -359,7 +362,7 @@ function renderItems(itemsToRender) {
                                     </button>
                                 </li>
                             ` : ''}
-
+                    
                             <li class="opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                                 <button data-id="${item.id}" data-action="clone" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Duplicate">
                                     <i class="fas fa-clone"></i>
