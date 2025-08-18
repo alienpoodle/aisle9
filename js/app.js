@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-import { getFirestore, collection, addDoc, onSnapshot, query, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 import { firebaseConfig } from './firebase-config.js';
 
 // Initialize Firebase
@@ -92,6 +92,23 @@ const itemCategoryHidden = document.getElementById('item-category');
 const itemStoreInput = document.getElementById('item-store-input');
 const itemStoreDropdown = document.getElementById('item-store-dropdown');
 const itemStoreHidden = document.getElementById('item-store');
+
+// New Edit Item Modal DOM Elements
+const editItemModal = document.getElementById('edit-item-modal');
+const closeEditItemModal = document.getElementById('close-edit-item-modal');
+const cancelEditItem = document.getElementById('cancel-edit-item');
+const editItemForm = document.getElementById('edit-item-form');
+const editItemIdInput = document.getElementById('edit-item-id');
+const editItemNameInput = document.getElementById('edit-item-name');
+const editItemDescriptionInput = document.getElementById('edit-item-description');
+const editItemCategoryInput = document.getElementById('edit-item-category-input');
+const editItemCategoryDropdown = document.getElementById('edit-item-category-dropdown');
+const editItemCategoryHidden = document.getElementById('edit-item-category');
+const editItemStoreInput = document.getElementById('edit-item-store-input');
+const editItemStoreDropdown = document.getElementById('edit-item-store-dropdown');
+const editItemStoreHidden = document.getElementById('edit-item-store');
+const editItemTypeInput = document.getElementById('edit-item-type');
+const editItemPriceInput = document.getElementById('edit-item-price');
 
 // View Containers
 const itemListingsView = document.getElementById('item-listings-view');
@@ -194,6 +211,17 @@ okItemDetailsModal.addEventListener('click', () => {
     itemDetailsModal.classList.add('hidden');
 });
 
+// Show/Hide Edit Item Modal
+closeEditItemModal.addEventListener('click', () => {
+    editItemModal.classList.add('hidden');
+    editItemForm.reset();
+});
+
+cancelEditItem.addEventListener('click', () => {
+    editItemModal.classList.add('hidden');
+    editItemForm.reset();
+});
+
 // Add New Item to Firestore
 addItemForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -225,6 +253,7 @@ addItemForm.addEventListener('submit', async (e) => {
             type: itemType,
             price: itemPrice,
             submittedBy: username,
+            submittedById: userId, // Add the user ID for authorization
             submissionDate: new Date().toISOString(),
             upvotes: [],
             downvotes: []
@@ -278,9 +307,6 @@ function setupSearchableDropdown(inputElement, dropdownElement, hiddenInputEleme
             dropdownElement.classList.add('hidden');
         }
     });
-
-    // Initial render on focus
-    inputElement.addEventListener('focus', () => renderOptions(inputElement.value));
 }
 
 // Function to render items as individual cards using the new CSS
@@ -311,25 +337,28 @@ function renderItems(itemsToRender) {
                     <div class="group relative inline-block h-9 w-9 overflow-hidden rounded-full bg-gray-900/80 transition-[width] duration-200 hover:w-[160px] hover:bg-gray-900">
                         <ul class="absolute inset-0 flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0">
                             <li class="p-2 transition-opacity duration-200">
-                            <button data-id="${item.id}" data-action="share" class="share-btn text-white/80 hover:text-blue-700 transition duration-150" aria-label="share">
-                                <i class="fas fa-share-alt text-2xl"></i>
-                            </button>
+                                <button data-id="${item.id}" data-action="share" class="share-btn text-white/80 hover:text-blue-700 transition duration-150" aria-label="share">
+                                    <i class="fas fa-share-alt text-2xl"></i>
+                                </button>
                             </li>
+                            
+                            ${userId && userId === item.submittedById ? `
+                                <li class="opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                                    <button data-id="${item.id}" data-action="edit" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </li>
+                                <li class="opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                                    <button data-id="${item.id}" data-action="delete" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </li>
+                            ` : ''}
 
                             <li class="opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                            <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Edit">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            </li>
-                            <li class="opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                            <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Duplicate">
-                                <i class="fas fa-clone"></i>
-                            </a>
-                            </li>
-                            <li class="opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                            <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Delete">
-                                <i class="fas fa-trash"></i>
-                            </a>
+                                <button data-id="${item.id}" data-action="clone" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Duplicate">
+                                    <i class="fas fa-clone"></i>
+                                </button>
                             </li>
                         </ul>
                     </div>
@@ -431,7 +460,7 @@ function renderComparisonItems(itemsToRender) {
     groupedItems.forEach(group => {
         const comparisonCard = document.createElement('div');
         comparisonCard.className = 'bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300';
-        
+         
         let variantsHtml = group.variants.map(variant => {
             const isConfirmed = variant.upvotes.length > variant.downvotes.length;
             const confirmationText = isConfirmed ? 'Confirmed True' : 'Confirmed False';
@@ -549,9 +578,9 @@ function applyFiltersAndSearch() {
 
     const filteredItems = allItems.filter(item => {
         const matchesSearch = item.name.toLowerCase().includes(searchTerm) ||
-                             (item.description && item.description.toLowerCase().includes(searchTerm)) ||
-                             item.category.toLowerCase().includes(searchTerm) ||
-                             item.store.toLowerCase().includes(searchTerm);
+                               (item.description && item.description.toLowerCase().includes(searchTerm)) ||
+                               item.category.toLowerCase().includes(searchTerm) ||
+                               item.store.toLowerCase().includes(searchTerm);
 
         const matchesStore = selectedStores.length === 0 || selectedStores.includes(item.store);
         const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(item.category);
@@ -607,7 +636,82 @@ function setupRealtimeItemListener() {
     });
 }
 
-// Handle upvote/downvote/share and item details click
+// New: Function to delete an item
+async function deleteItem(itemId) {
+    if (!userId) {
+        showMessageBox("You must be logged in to delete items.");
+        return;
+    }
+    try {
+        const itemRef = doc(db, `artifacts/${appId}/public/data/items`, itemId);
+        await fetchWithBackoff(() => deleteDoc(itemRef));
+        showMessageBox("Item deleted successfully!");
+    } catch (error) {
+        console.error("Error deleting document: ", error);
+        showMessageBox("Failed to delete item. Please try again.");
+    }
+}
+
+// New: Function to clone an item
+async function cloneItem(item) {
+    if (!userId) {
+        showMessageBox("You must be logged in to clone items.");
+        return;
+    }
+    try {
+        const itemsCollectionRef = collection(db, `artifacts/${appId}/public/data/items`);
+        await fetchWithBackoff(() => addDoc(itemsCollectionRef, {
+            ...item,
+            submittedBy: username,
+            submittedById: userId,
+            submissionDate: new Date().toISOString(),
+            upvotes: [],
+            downvotes: []
+        }));
+        showMessageBox("Item cloned successfully!");
+    } catch (error) {
+        console.error("Error cloning document: ", error);
+        showMessageBox("Failed to clone item. Please try again.");
+    }
+}
+
+// New: Event listener for the edit form submission
+editItemForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const itemId = editItemIdInput.value;
+    const itemName = editItemNameInput.value.trim();
+    const itemDescription = editItemDescriptionInput.value.trim();
+    const itemCategory = editItemCategoryHidden.value;
+    const itemStore = editItemStoreHidden.value;
+    const itemType = editItemTypeInput.value;
+    const itemPrice = parseFloat(editItemPriceInput.value);
+
+    if (!userId) {
+        showMessageBox("You must be logged in to edit items.");
+        return;
+    }
+    
+    try {
+        const itemRef = doc(db, `artifacts/${appId}/public/data/items`, itemId);
+        await fetchWithBackoff(() => updateDoc(itemRef, {
+            name: itemName,
+            description: itemDescription,
+            category: itemCategory,
+            store: itemStore,
+            type: itemType,
+            price: itemPrice
+        }));
+        showMessageBox("Item updated successfully!");
+        editItemModal.classList.add('hidden');
+        editItemForm.reset();
+    } catch (error) {
+        console.error("Error updating document: ", error);
+        showMessageBox("Failed to update item. Please try again.");
+    }
+});
+
+// Handle upvote/downvote/share/edit/clone/delete and item details click
 document.addEventListener('click', async (e) => {
     const button = e.target.closest('button');
     const itemNameSpan = e.target.closest('.clickable-item-name');
@@ -685,6 +789,26 @@ document.addEventListener('click', async (e) => {
             } catch (error) {
                 console.error("Error updating vote:", error);
                 showMessageBox("Failed to record vote. Please try again.");
+            }
+        } else if (action === 'edit') {
+            // Populate the edit modal with current item data
+            editItemIdInput.value = currentItem.id;
+            editItemNameInput.value = currentItem.name;
+            editItemDescriptionInput.value = currentItem.description || '';
+            editItemPriceInput.value = currentItem.price;
+            editItemTypeInput.value = currentItem.type || 'N/A';
+            setupSearchableDropdown(editItemCategoryInput, editItemCategoryDropdown, editItemCategoryHidden, categories);
+            editItemCategoryInput.value = currentItem.category;
+            editItemCategoryHidden.value = currentItem.category;
+            setupSearchableDropdown(editItemStoreInput, editItemStoreDropdown, editItemStoreHidden, supermarkets);
+            editItemStoreInput.value = currentItem.store;
+            editItemStoreHidden.value = currentItem.store;
+            editItemModal.classList.remove('hidden');
+        } else if (action === 'clone') {
+            await cloneItem(currentItem);
+        } else if (action === 'delete') {
+            if (confirm(`Are you sure you want to delete "${currentItem.name}"?`)) {
+                await deleteItem(currentItem.id);
             }
         }
     } else if (itemNameSpan) {
