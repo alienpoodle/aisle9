@@ -187,6 +187,58 @@
                 </form>
             </div>
         </div>
+        
+        <div id="edit-item-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg mx-4">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-semibold text-gray-800">Edit Item Listing</h3>
+                    <button id="close-edit-item-modal" class="text-gray-500 hover:text-gray-700 text-2xl leading-none">&times;</button>
+                </div>
+                <form id="edit-item-form" class="space-y-4 text-sm">
+                    <input type="hidden" id="edit-item-id" name="edit-item-id">
+                    <div>
+                        <label for="edit-item-name" class="block font-medium text-gray-700">Item Name</label>
+                        <input type="text" id="edit-item-name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="edit-item-description" class="block font-medium text-gray-700">Description</label>
+                        <textarea id="edit-item-description" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    </div>
+                    <div>
+                        <label for="edit-item-category-input" class="block font-medium text-gray-700">Category</label>
+                        <div class="relative">
+                            <input type="text" id="edit-item-category-input" autocomplete="off" placeholder="Search or select category..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <div id="edit-item-category-dropdown" class="absolute z-50 w-full bg-white border border-gray-300 rounded-md shadow-lg hidden"></div>
+                            <input type="hidden" id="edit-item-category" name="edit-item-category">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="edit-item-store-input" class="block font-medium text-gray-700">Store</label>
+                        <div class="relative">
+                            <input type="text" id="edit-item-store-input" autocomplete="off" placeholder="Search or select store..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <div id="edit-item-store-dropdown" class="absolute z-50 w-full bg-white border border-gray-300 rounded-md shadow-lg hidden"></div>
+                            <input type="hidden" id="edit-item-store" name="edit-item-store">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="edit-item-type" class="block font-medium text-gray-700">Type</label>
+                        <select id="edit-item-type" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Select type...</option>
+                            <option value="Local">Local</option>
+                            <option value="Imported">Imported</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="edit-item-price" class="block font-medium text-gray-700">Price (XCD$)</label>
+                        <input type="number" id="edit-item-price" step="0.01" min="0" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="flex justify-end space-x-2 mt-6">
+                        <button type="button" id="cancel-edit-item" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition duration-300">Cancel</button>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300">Update Listing</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <div id="item-details-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden">
             <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg mx-4">
