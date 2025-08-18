@@ -338,7 +338,8 @@ function renderItems(itemsToRender) {
                     <h3 class="text-xl font-semibold min-w-0">
                         <span class="clickable-item-name" data-item-id="${item.id}">${item.name}</span>
                     </h3>
-                    <div class="group relative inline-block h-9 w-9 overflow-hidden rounded-full bg-gray-900/80 transition-[width] duration-200 hover:w-[160px] hover:bg-gray-900">
+                    <div class="group relative inline-block h-9 w-9 overflow-hidden rounded-full bg-gray-900/80 transition-[width] duration-200 hover:w-[160px] hover:bg-gradient-to-r from-blue-500 to-indigo-600">
+                        </i><i class="fas fa-ellipsis"></i>
                         <ul class="absolute inset-0 flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0">
                             <li class="p-2 transition-opacity duration-200">
                                 <button data-id="${item.id}" data-action="share" class="share-btn text-white/80 hover:text-blue-700 transition duration-150" aria-label="share">
