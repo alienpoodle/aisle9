@@ -29,10 +29,12 @@ function showMessageBox(message) {
 
 // Function to generate a random username
 function generateRandomUsername() {
+    const adjectives = ['Happy', 'Swift', 'Brave', 'Clever', 'Quiet', 'Strong', 'Bold', 'Bright', 'Calm', 'Gentle'];
     const animals = ['Panda', 'Tiger', 'Lion', 'Eagle', 'Wolf', 'Fox', 'Bear', 'Shark', 'Dolphin', 'Giraffe'];
-    const randomNumber = Math.floor(Math.random() * 100);
+    const randomNumber = Math.floor(Math.random() * 900) + 100; // Generate a 3-digit number
+    const randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
     const randomAnimal = animals[Math.floor(Math.random() * animals.length)];
-    return `user${randomNumber}-${randomAnimal}`;
+    return `${randomAdjective}${randomAnimal}${randomNumber}`;
 }
 
 // Password validation regex
