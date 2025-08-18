@@ -1,6 +1,3 @@
-// js/app.js
-// This script contains the core application logic for displaying and managing grocery price listings.
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getFirestore, collection, doc, getDoc, getDocs, onSnapshot, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 import { firebaseConfig } from './firebase-config.js';
@@ -45,6 +42,12 @@ const tabs = {
 
 // Search and Filter
 const searchInput = document.getElementById('search-input');
+const filterBtn = document.getElementById('filter-btn');
+const clearFiltersBtn = document.getElementById('clear-filters-btn');
+const filterModal = document.getElementById('filter-modal');
+const closeFilterModalBtn = document.getElementById('close-filter-modal');
+const applyFiltersBtn = document.getElementById('apply-filters-btn');
+
 const storeFilterInput = document.getElementById('store-filter-input');
 const storeFilterDropdown = document.getElementById('store-filter-dropdown');
 const storeFilterHidden = document.getElementById('store-filter-hidden');
@@ -112,6 +115,8 @@ document.getElementById('cancel-edit-item').addEventListener('click', () => clos
 closeItemDetailsModalBtn.addEventListener('click', () => closeModal(itemDetailsModal));
 okItemDetailsModalBtn.addEventListener('click', () => closeModal(itemDetailsModal));
 addItemBtn.addEventListener('click', () => openModal(addItemModal));
+filterBtn.addEventListener('click', () => openModal(filterModal));
+closeFilterModalBtn.addEventListener('click', () => closeModal(filterModal));
 
 // Searchable Dropdown Logic
 function setupSearchableDropdown(inputElement, dropdownElement, hiddenInputElement, optionsList) {
@@ -133,7 +138,6 @@ function setupSearchableDropdown(inputElement, dropdownElement, hiddenInputEleme
                     inputElement.value = option;
                     hiddenInputElement.value = option;
                     dropdownElement.classList.add('hidden');
-                    applyFiltersAndSearch();
                 });
                 dropdownElement.appendChild(item);
             });
@@ -155,23 +159,24 @@ function setupSearchableDropdown(inputElement, dropdownElement, hiddenInputEleme
         }
     });
 
-    const clearButton = inputElement.nextElementSibling;
-    if (clearButton && clearButton.classList.contains('clear-filter-btn')) {
-        clearButton.addEventListener('click', () => {
+    const clearInputButton = inputElement.nextElementSibling;
+    if (clearInputButton && clearInputButton.classList.contains('clear-input-btn')) {
+        clearInputButton.addEventListener('click', () => {
             inputElement.value = '';
             hiddenInputElement.value = '';
-            applyFiltersAndSearch();
+            dropdownElement.classList.add('hidden');
         });
     }
 }
 
 // Populate UI with data
 function populateUIFromData() {
+    // Setup searchable dropdowns for the filter modal
     setupSearchableDropdown(storeFilterInput, storeFilterDropdown, storeFilterHidden, supermarkets);
     setupSearchableDropdown(categoryFilterInput, categoryFilterDropdown, categoryFilterHidden, categories);
     setupSearchableDropdown(typeFilterInput, typeFilterDropdown, typeFilterHidden, itemTypes);
 
-    // Setup searchable dropdowns for the modals
+    // Setup searchable dropdowns for the add/edit modals
     const modalItemNames = allItems.map(item => item.name);
     setupSearchableDropdown(document.getElementById('item-name-input'), document.getElementById('item-name-dropdown'), document.getElementById('item-name'), [...new Set(modalItemNames)]);
     setupSearchableDropdown(document.getElementById('item-category-input'), document.getElementById('item-category-dropdown'), document.getElementById('item-category'), [...new Set(categories)]);
@@ -186,7 +191,6 @@ function loadAllItems() {
     loadingIndicator.classList.remove('hidden');
     onSnapshot(itemsRef, (snapshot) => {
         allItems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        // Extract unique supermarkets and categories
         supermarkets = [...new Set(allItems.map(item => item.store))];
         categories = [...new Set(allItems.map(item => item.category))];
         
@@ -224,11 +228,25 @@ function applyFiltersAndSearch() {
     }
 }
 
-// Initial data load and event listeners for search and filters
+// Event listeners for new filter buttons
+applyFiltersBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    applyFiltersAndSearch();
+    closeModal(filterModal);
+});
+
+clearFiltersBtn.addEventListener('click', () => {
+    storeFilterInput.value = '';
+    storeFilterHidden.value = '';
+    categoryFilterInput.value = '';
+    categoryFilterHidden.value = '';
+    typeFilterInput.value = '';
+    typeFilterHidden.value = '';
+    applyFiltersAndSearch();
+});
+
+// Initial data load and event listeners for search
 searchInput.addEventListener('input', applyFiltersAndSearch);
-storeFilterInput.addEventListener('input', applyFiltersAndSearch);
-categoryFilterInput.addEventListener('input', applyFiltersAndSearch);
-typeFilterInput.addEventListener('input', applyFiltersAndSearch);
 
 // Rendering functions
 function renderItems(itemsToRender) {
