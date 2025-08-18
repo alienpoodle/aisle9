@@ -67,35 +67,42 @@
             </div>
         </header>
 
-        <main class="container mx-auto p-4 flex-grow">
-            <section class="bg-white rounded-xl shadow-lg p-6 mb-6">
-                <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
-                    <div class="relative w-full md:w-3/4">
-                        <input type="text" id="search-input" placeholder="Search for items..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
-                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg"></i>
-                    </div>
-                    <div class="w-full md:w-1/4 flex flex-wrap gap-2 justify-end">
-                        <div class="relative inline-block text-left w-full sm:w-auto z-40" id="store-filter-container">
-                            <button id="store-filter-btn" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none">
-                                Store <i class="fas fa-chevron-down ml-2"></i>
-                            </button>
-                            <div id="store-filter-options" role="menu" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50"></div>
-                        </div>
-                        <div class="relative inline-block text-left w-full sm:w-auto z-30" id="category-filter-container">
-                            <button id="category-filter-btn" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none">
-                                Category <i class="fas fa-chevron-down ml-2"></i>
-                            </button>
-                            <div id="category-filter-options" role="menu" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50"></div>
-                        </div>
-                        <div class="relative inline-block text-left w-full sm:w-auto z-20" id="type-filter-container">
-                            <button id="type-filter-btn" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none">
-                                Type <i class="fas fa-chevron-down ml-2"></i>
-                            </button>
-                            <div id="type-filter-options" role="menu" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50"></div>
-                        </div>
-                    </div>
+<section class="bg-white rounded-xl shadow-lg p-6 mb-6">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
+        <div class="relative w-full md:w-3/4">
+            <input type="text" id="search-input" placeholder="Search for items..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
+            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg"></i>
+        </div>
+        <div class="w-full md:w-1/4 flex flex-wrap gap-2 justify-end">
+            <div class="relative w-full sm:w-auto z-40">
+                <div class="relative">
+                    <input type="text" id="store-filter-input" placeholder="Filter by Store..." class="w-full pl-3 pr-8 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <button type="button" class="clear-filter-btn absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none">&times;</button>
                 </div>
-            </section>
+                <div id="store-filter-dropdown" class="absolute z-50 w-full bg-white border border-gray-300 rounded-md shadow-lg hidden max-h-60 overflow-y-auto"></div>
+                <input type="hidden" id="store-filter-hidden">
+            </div>
+
+            <div class="relative w-full sm:w-auto z-30">
+                <div class="relative">
+                    <input type="text" id="category-filter-input" placeholder="Filter by Category..." class="w-full pl-3 pr-8 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <button type="button" class="clear-filter-btn absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none">&times;</button>
+                </div>
+                <div id="category-filter-dropdown" class="absolute z-50 w-full bg-white border border-gray-300 rounded-md shadow-lg hidden max-h-60 overflow-y-auto"></div>
+                <input type="hidden" id="category-filter-hidden">
+            </div>
+
+            <div class="relative w-full sm:w-auto z-20">
+                <div class="relative">
+                    <input type="text" id="type-filter-input" placeholder="Filter by Type..." class="w-full pl-3 pr-8 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <button type="button" class="clear-filter-btn absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none">&times;</button>
+                </div>
+                <div id="type-filter-dropdown" class="absolute z-50 w-full bg-white border border-gray-300 rounded-md shadow-lg hidden max-h-60 overflow-y-auto"></div>
+                <input type="hidden" id="type-filter-hidden">
+            </div>
+        </div>
+    </div>
+</section>
 
             <div class="flex bg-gray-100 rounded-t-lg shadow-md mb-4">
                 <button id="tab-listings" class="tab-btn flex-1 px-4 py-3 text-center text-sm font-medium text-gray-700 hover:bg-gray-200 rounded-tl-lg transition duration-200 border-b-2 border-transparent">
