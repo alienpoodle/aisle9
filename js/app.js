@@ -308,16 +308,12 @@ function renderItems(itemsToRender) {
                     <h3 class="text-xl font-semibold min-w-0">
                         <span class="clickable-item-name" data-item-id="${item.id}">${item.name}</span>
                     </h3>
-                    <button data-id="${item.id}" data-action="share" class="share-btn text-blue-500 hover:text-blue-700 transition duration-150">
-                        
-                    </button>
                     <div class="group relative inline-block h-9 w-9 overflow-hidden rounded-full bg-gray-900/80 transition-[width] duration-200 hover:w-[160px] hover:bg-gray-900">
                         <ul class="absolute inset-0 flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0">
                             <li class="p-2 transition-opacity duration-200">
-                            <a href="#" data-id="${item.id}" data-action="share" class="share-btn text-white/80 hover:text-blue-700 transition duration-150" aria-label="share">
+                            <button data-id="${item.id}" data-action="share" class="share-btn text-white/80 hover:text-blue-700 transition duration-150" aria-label="share">
                                 <i class="fas fa-share-alt text-2xl"></i>
-                            </a>
-
+                            </button>
                             </li>
 
                             <li class="opacity-0 transition-opacity duration-200 group-hover:opacity-100">
