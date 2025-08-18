@@ -2,6 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebas
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, onSnapshot, query, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 import { firebaseConfig } from './firebase-config.js';
+import { GROCERY_ITEMS } from './grocery-items.js';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -80,15 +81,14 @@ const addItemModal = document.getElementById('add-item-modal');
 const closeAddItemModal = document.getElementById('close-add-item-modal');
 const cancelAddItem = document.getElementById('cancel-add-item');
 const addItemForm = document.getElementById('add-item-form');
-// Removed the old select elements
-// const addItemStoreSelect = document.getElementById('item-store');
-// const addItemCategorySelect = document.getElementById('item-category');
 
-// New searchable dropdown elements
+// New searchable dropdown elements for ADD ITEM
+const itemNameInput = document.getElementById('item-name-input');
+const itemNameDropdown = document.getElementById('item-name-dropdown');
+const itemNameHidden = document.getElementById('item-name');
 const itemCategoryInput = document.getElementById('item-category-input');
 const itemCategoryDropdown = document.getElementById('item-category-dropdown');
 const itemCategoryHidden = document.getElementById('item-category');
-
 const itemStoreInput = document.getElementById('item-store-input');
 const itemStoreDropdown = document.getElementById('item-store-dropdown');
 const itemStoreHidden = document.getElementById('item-store');
@@ -99,7 +99,9 @@ const closeEditItemModal = document.getElementById('close-edit-item-modal');
 const cancelEditItem = document.getElementById('cancel-edit-item');
 const editItemForm = document.getElementById('edit-item-form');
 const editItemIdInput = document.getElementById('edit-item-id');
-const editItemNameInput = document.getElementById('edit-item-name');
+const editItemNameInput = document.getElementById('edit-item-name-input');
+const editItemNameDropdown = document.getElementById('edit-item-name-dropdown');
+const editItemNameHidden = document.getElementById('edit-item-name');
 const editItemDescriptionInput = document.getElementById('edit-item-description');
 const editItemCategoryInput = document.getElementById('edit-item-category-input');
 const editItemCategoryDropdown = document.getElementById('edit-item-category-dropdown');
@@ -188,6 +190,8 @@ tabComparisons.addEventListener('click', () => showView('comparison'));
 addItemBtn.addEventListener('click', () => {
     addItemModal.classList.remove('hidden');
     // Clear and populate searchable dropdowns on modal open
+    const itemNames = GROCERY_ITEMS.map(item => `${item.name} - ${item.brand} - ${item.size}`);
+    setupSearchableDropdown(itemNameInput, itemNameDropdown, itemNameHidden, itemNames);
     setupSearchableDropdown(itemCategoryInput, itemCategoryDropdown, itemCategoryHidden, categories);
     setupSearchableDropdown(itemStoreInput, itemStoreDropdown, itemStoreHidden, supermarkets);
 });
@@ -226,7 +230,7 @@ cancelEditItem.addEventListener('click', () => {
 addItemForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const itemName = document.getElementById('item-name').value.trim();
+    const itemName = itemNameHidden.value;
     const itemDescription = document.getElementById('item-description').value.trim();
     const itemCategory = itemCategoryHidden.value;
     const itemStore = itemStoreHidden.value;
@@ -680,7 +684,7 @@ editItemForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const itemId = editItemIdInput.value;
-    const itemName = editItemNameInput.value.trim();
+    const itemName = editItemNameHidden.value;
     const itemDescription = editItemDescriptionInput.value.trim();
     const itemCategory = editItemCategoryHidden.value;
     const itemStore = editItemStoreHidden.value;
@@ -793,10 +797,14 @@ document.addEventListener('click', async (e) => {
         } else if (action === 'edit') {
             // Populate the edit modal with current item data
             editItemIdInput.value = currentItem.id;
+            editItemNameHidden.value = currentItem.name;
             editItemNameInput.value = currentItem.name;
             editItemDescriptionInput.value = currentItem.description || '';
             editItemPriceInput.value = currentItem.price;
             editItemTypeInput.value = currentItem.type || 'N/A';
+
+            const itemNames = GROCERY_ITEMS.map(item => `${item.name} - ${item.brand} - ${item.size}`);
+            setupSearchableDropdown(editItemNameInput, editItemNameDropdown, editItemNameHidden, itemNames);
             setupSearchableDropdown(editItemCategoryInput, editItemCategoryDropdown, editItemCategoryHidden, categories);
             editItemCategoryInput.value = currentItem.category;
             editItemCategoryHidden.value = currentItem.category;
