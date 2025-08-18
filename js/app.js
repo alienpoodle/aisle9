@@ -178,12 +178,12 @@ function populateUIFromData() {
 
     // Setup searchable dropdowns for the add/edit modals
     const modalItemNames = allItems.map(item => item.name);
-    setupSearchableDropdown(document.getElementById('item-name-input'), document.getElementById('item-name-dropdown'), document.getElementById('item-name'), [...new Set(modalItemNames)]);
-    setupSearchableDropdown(document.getElementById('item-category-input'), document.getElementById('item-category-dropdown'), document.getElementById('item-category'), [...new Set(categories)]);
-    setupSearchableDropdown(document.getElementById('item-store-input'), document.getElementById('item-store-dropdown'), document.getElementById('item-store'), [...new Set(supermarkets)]);
-    setupSearchableDropdown(document.getElementById('edit-item-name-input'), document.getElementById('edit-item-name-dropdown'), document.getElementById('edit-item-name'), [...new Set(modalItemNames)]);
-    setupSearchableDropdown(document.getElementById('edit-item-category-input'), document.getElementById('edit-item-category-dropdown'), document.getElementById('edit-item-category'), [...new Set(categories)]);
-    setupSearchableDropdown(document.getElementById('edit-item-store-input'), document.getElementById('edit-item-store-dropdown'), document.getElementById('edit-item-store'), [...new Set(supermarkets)]);
+    setupSearchableDropdown(document.getElementById('item-name-input'), document.getElementById('item-name-dropdown'), document.getElementById('item-name-hidden'), [...new Set(modalItemNames)]);
+    setupSearchableDropdown(document.getElementById('item-category-input'), document.getElementById('item-category-dropdown'), document.getElementById('item-category-hidden'), [...new Set(categories)]);
+    setupSearchableDropdown(document.getElementById('item-store-input'), document.getElementById('item-store-dropdown'), document.getElementById('item-store-hidden'), [...new Set(supermarkets)]);
+    setupSearchableDropdown(document.getElementById('edit-item-name-input'), document.getElementById('edit-item-name-dropdown'), document.getElementById('edit-item-name-hidden'), [...new Set(modalItemNames)]);
+    setupSearchableDropdown(document.getElementById('edit-item-category-input'), document.getElementById('edit-item-category-dropdown'), document.getElementById('edit-item-category-hidden'), [...new Set(categories)]);
+    setupSearchableDropdown(document.getElementById('edit-item-store-input'), document.getElementById('edit-item-store-dropdown'), document.getElementById('edit-item-store-hidden'), [...new Set(supermarkets)]);
 }
 
 // Function to handle fetching and filtering of data
@@ -530,10 +530,10 @@ document.addEventListener('click', async (e) => {
 // Form Submissions
 addItemForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const itemName = document.getElementById('item-name-input').value;
+    const itemName = document.getElementById('item-name-hidden').value;
     const itemDescription = document.getElementById('item-description').value;
-    const itemCategory = document.getElementById('item-category-input').value;
-    const itemStore = document.getElementById('item-store-input').value;
+    const itemCategory = document.getElementById('item-category-hidden').value;
+    const itemStore = document.getElementById('item-store-hidden').value;
     const itemType = document.getElementById('item-type').value;
     const itemPrice = parseFloat(document.getElementById('item-price').value);
 
@@ -565,10 +565,10 @@ addItemForm.addEventListener('submit', async (e) => {
 editItemForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const docId = document.getElementById('edit-item-id').value;
-    const itemName = document.getElementById('edit-item-name-input').value;
+    const itemName = document.getElementById('edit-item-name-hidden').value;
     const itemDescription = document.getElementById('edit-item-description').value;
-    const itemCategory = document.getElementById('edit-item-category-input').value;
-    const itemStore = document.getElementById('edit-item-store-input').value;
+    const itemCategory = document.getElementById('edit-item-category-hidden').value;
+    const itemStore = document.getElementById('edit-item-store-hidden').value;
     const itemType = document.getElementById('edit-item-type').value;
     const itemPrice = parseFloat(document.getElementById('edit-item-price').value);
 
