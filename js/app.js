@@ -311,6 +311,31 @@ function renderItems(itemsToRender) {
                     <button data-id="${item.id}" data-action="share" class="share-btn text-blue-500 hover:text-blue-700 transition duration-150">
                         <i class="fas fa-share-alt text-2xl"></i>
                     </button>
+                    <div class="group relative inline-block h-9 w-9 overflow-hidden rounded-full bg-gray-900/80 transition-[width] duration-200 hover:w-[160px] hover:bg-gray-900">
+                        <ul class="absolute inset-0 flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0">
+                            <li class="p-2 transition-opacity duration-200">
+                            <a href="#" class="text-white/80 transition-colors hover:text-white" aria-label="Show Actions">
+                                <i class="fas fa-ellipsis-h text-xl"></i>
+                            </a>
+                            </li>
+
+                            <li class="opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                            <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            </li>
+                            <li class="opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                            <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Duplicate">
+                                <i class="fas fa-clone"></i>
+                            </a>
+                            </li>
+                            <li class="opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                            <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Delete">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <span class="text-3xl font-bold text-blue-600">XCD$${item.price.toFixed(2)}</span>
                 <div class="flex items-center text-sm font-medium mt-2">
