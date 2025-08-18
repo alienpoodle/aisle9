@@ -145,8 +145,12 @@
                 </div>
                 <form id="add-item-form" class="space-y-4 text-sm">
                     <div>
-                        <label for="item-name" class="block font-medium text-gray-700">Item Name</label>
-                        <input type="text" id="item-name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <label for="item-name-input" class="block font-medium text-gray-700">Item Name</label>
+                        <div class="relative">
+                            <input type="text" id="item-name-input" autocomplete="off" placeholder="Search for an item..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <div id="item-name-dropdown" class="absolute z-50 w-full bg-white border border-gray-300 rounded-md shadow-lg hidden max-h-60 overflow-y-auto"></div>
+                            <input type="hidden" id="item-name" name="item-name">
+                        </div>
                     </div>
                     <div>
                         <label for="item-description" class="block font-medium text-gray-700">Description</label>
@@ -197,8 +201,12 @@
                 <form id="edit-item-form" class="space-y-4 text-sm">
                     <input type="hidden" id="edit-item-id" name="edit-item-id">
                     <div>
-                        <label for="edit-item-name" class="block font-medium text-gray-700">Item Name</label>
-                        <input type="text" id="edit-item-name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <label for="edit-item-name-input" class="block font-medium text-gray-700">Item Name</label>
+                        <div class="relative">
+                            <input type="text" id="edit-item-name-input" autocomplete="off" placeholder="Search for an item..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <div id="edit-item-name-dropdown" class="absolute z-50 w-full bg-white border border-gray-300 rounded-md shadow-lg hidden max-h-60 overflow-y-auto"></div>
+                            <input type="hidden" id="edit-item-name" name="edit-item-name">
+                        </div>
                     </div>
                     <div>
                         <label for="edit-item-description" class="block font-medium text-gray-700">Description</label>
@@ -290,5 +298,6 @@
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/login.js"></script>
     <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/grocery-items.js"></script>
 </body>
 </html>
