@@ -101,7 +101,8 @@ signupForm.addEventListener('submit', async (e) => {
         const generatedUsername = generateRandomUsername();
 
         // Store the username in Firestore
-        const userRef = doc(db, `artifacts/${appId}/public/data/users`, user.uid);
+        // FIX: CHANGE THE FIREBASE PATH TO A STANDARD USERS COLLECTION
+        const userRef = doc(db, 'users', user.uid);
         await setDoc(userRef, {
             username: generatedUsername,
             email: user.email,
@@ -131,7 +132,8 @@ logoutBtn.addEventListener('click', async () => {
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         // User is signed in, get username and dispatch event
-        const userRef = doc(db, `artifacts/${appId}/public/data/users`, user.uid);
+        // FIX: CHANGE THE FIREBASE PATH TO A STANDARD USERS COLLECTION
+        const userRef = doc(db, 'users', user.uid);
         const userSnap = await getDoc(userRef);
 
         let username = user.email; // Fallback to email
