@@ -11,7 +11,6 @@
 </head>
 <body class="min-h-screen flex flex-col bg-gray-50">
 
-    <!-- Auth Page (Login/Sign Up) -->
     <section id="auth-page" class="flex items-center justify-center min-h-screen bg-gray-100 p-4">
         <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto transform transition-all duration-500">
             <h2 id="auth-title" class="text-4xl font-bold text-center text-gray-900 mb-6">Welcome!</h2>
@@ -50,7 +49,6 @@
         </div>
     </section>
 
-    <!-- Main App Container -->
     <div id="app-container" class="hidden min-h-screen flex flex-col">
         <header class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 shadow-xl">
             <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center">
@@ -68,7 +66,6 @@
         </header>
 
         <main class="container mx-auto p-4 flex-grow">
-            <!-- Search and Filter Section -->
             <section class="bg-white rounded-xl shadow-lg p-6 mb-6">
                 <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
                     <div class="relative w-full flex items-center">
@@ -86,7 +83,6 @@
                 </div>
             </section>
 
-            <!-- Tabs for Views -->
             <div class="flex bg-gray-100 rounded-t-lg shadow-md mb-4">
                 <button id="tab-listings" class="tab-btn active flex-1 px-4 py-3 text-center text-sm font-medium text-gray-700 hover:bg-gray-200 rounded-tl-lg transition duration-200 border-b-2 border-transparent">
                     Item Listings
@@ -96,7 +92,6 @@
                 </button>
             </div>
 
-            <!-- Item Listings View -->
             <section id="item-listings-view" class="bg-white rounded-lg shadow-lg p-6">
                 <h2 class="text-2xl font-semibold mb-4 text-gray-800">Grocery Price Listings</h2>
                 <div id="loading-indicator" class="text-center text-gray-500 hidden text-sm">
@@ -107,11 +102,9 @@
                     <p>No items found matching your criteria.</p>
                 </div>
                 <div id="item-cards-container" class="flex flex-wrap -mx-4">
-                    <!-- Item cards will be rendered here -->
-                </div>
+                    </div>
             </section>
 
-            <!-- Price Comparison View -->
             <section id="price-comparison-view" class="bg-white rounded-lg shadow-lg p-6 hidden">
                 <h2 class="text-2xl font-semibold mb-4 text-gray-800">Price Comparisons</h2>
                 <div id="loading-comparison-indicator" class="text-center text-gray-500 hidden text-sm">
@@ -122,12 +115,10 @@
                     <p>No items found for comparison matching your criteria.</p>
                 </div>
                 <div id="comparison-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                    <!-- Comparison cards will be rendered here -->
-                </div>
+                    </div>
             </section>
         </main>
         
-        <!-- Filter Modal -->
         <div id="filter-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden">
             <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg mx-4">
                 <div class="flex justify-between items-center mb-6">
@@ -166,7 +157,6 @@
             </div>
         </div>
 
-        <!-- Add Item Modal -->
         <div id="add-item-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden">
             <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg mx-4">
                 <div class="flex justify-between items-center mb-6">
@@ -222,7 +212,6 @@
             </div>
         </div>
         
-        <!-- Edit Item Modal -->
         <div id="edit-item-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden">
             <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg mx-4">
                 <div class="flex justify-between items-center mb-6">
@@ -279,7 +268,6 @@
             </div>
         </div>
 
-        <!-- Item Details Modal -->
         <div id="item-details-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden">
             <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg mx-4">
                 <div class="flex flex-col gap-6">
@@ -306,7 +294,6 @@
             </div>
         </div>
 
-        <!-- Custom Message Box -->
         <div id="message-box" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden">
             <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm mx-4 text-center">
                 <p id="message-text" class="text-base font-medium text-gray-800 mb-4"></p>
