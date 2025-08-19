@@ -1,4 +1,5 @@
-const CACHE_NAME = 'aisle9-cache-v1.2.5';
+// service-worker.js
+const CACHE_NAME = 'aisle9-cache-v1.2.6';
 const urlsToCache = [
     '/',
     '/index.html',
