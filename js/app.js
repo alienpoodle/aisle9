@@ -122,12 +122,19 @@ const comparisonCardsContainer = document.getElementById('comparison-cards-conta
 
 // Search and Filter
 const searchInput = document.getElementById('search-input');
-const storeFilterBtn = document.getElementById('store-filter-btn');
-const storeFilterOptions = document.getElementById('store-filter-options');
-const categoryFilterBtn = document.getElementById('category-filter-btn');
-const categoryFilterOptions = document.getElementById('category-filter-options');
-const typeFilterBtn = document.getElementById('type-filter-btn');
-const typeFilterOptions = document.getElementById('type-filter-options');
+const filterBtn = document.getElementById('filter-btn');
+const clearFiltersBtn = document.getElementById('clear-filters-btn');
+const filterModal = document.getElementById('filter-modal');
+const closeFilterModal = document.getElementById('close-filter-modal');
+const applyFiltersBtn = document.getElementById('apply-filters-btn');
+
+// Filter dropdown inputs and containers
+const storeFilterInput = document.getElementById('store-filter-input');
+const storeFilterDropdown = document.getElementById('store-filter-dropdown');
+const categoryFilterInput = document.getElementById('category-filter-input');
+const categoryFilterDropdown = document.getElementById('category-filter-dropdown');
+const typeFilterInput = document.getElementById('type-filter-input');
+const typeFilterDropdown = document.getElementById('type-filter-dropdown');
 
 // User Display
 const userDisplay = document.getElementById('user-display');
@@ -159,6 +166,11 @@ const detailItemSubmittedBy = document.getElementById('detail-item-submitted-by'
 
 let allItems = [];
 let currentView = 'cards';
+let activeFilters = {
+    store: [],
+    category: [],
+    type: []
+};
 
 // Function to switch between views
 function showView(viewName) {
@@ -527,72 +539,111 @@ function showItemDetails(item) {
     itemDetailsModal.classList.remove('hidden');
 }
 
-// Helper to get selected values from multiselect checkboxes
-function getSelectedValues(containerId) {
-    return Array.from(document.querySelectorAll(`#${containerId} input[type="checkbox"]:checked`)).map(checkbox => checkbox.value);
-}
-
 // Populate filter dropdowns and the store/category datalists
 function populateUIFromData() {
-    // We no longer populate the add item form's select menus here,
-    // as they are now handled by the new searchable dropdowns.
-
-    // Populate multi-select filter options with checkboxes
-    populateFilterCheckboxes(storeFilterOptions, supermarkets);
-    populateFilterCheckboxes(categoryFilterOptions, categories);
-    populateFilterCheckboxes(typeFilterOptions, itemTypes);
+    setupSearchableDropdown(storeFilterInput, storeFilterDropdown, null, supermarkets);
+    setupSearchableDropdown(categoryFilterInput, categoryFilterDropdown, null, categories);
+    setupSearchableDropdown(typeFilterInput, typeFilterDropdown, null, itemTypes);
 }
 
-// Helper function to create checkboxes for a filter
-function populateFilterCheckboxes(container, options) {
-    container.innerHTML = '';
-    // Add a "Select All" option
-    const selectAllDiv = document.createElement('div');
-    selectAllDiv.className = 'flex items-center px-4 py-2 hover:bg-gray-100';
-    selectAllDiv.innerHTML = `
-        <input type="checkbox" id="select-all-${container.id}" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-        <label for="select-all-${container.id}" class="ml-2 block font-medium text-gray-900">Select All</label>
-    `;
-    container.appendChild(selectAllDiv);
-    document.getElementById(`select-all-${container.id}`).addEventListener('change', (e) => {
-        const isChecked = e.target.checked;
-        container.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-            checkbox.checked = isChecked;
-        });
-        applyFiltersAndSearch();
+// Function to handle the searchable dropdown logic
+function setupFilterDropdown(inputElement, dropdownElement, optionsList, filterType) {
+    const renderOptions = (filter = '') => {
+        dropdownElement.innerHTML = '';
+        const filteredOptions = optionsList.filter(option => option.toLowerCase().includes(filter.toLowerCase()));
+
+        if (filteredOptions.length === 0) {
+            const noResults = document.createElement('div');
+            noResults.className = 'px-4 py-2 text-gray-500';
+            noResults.textContent = 'No results found';
+            dropdownElement.appendChild(noResults);
+        } else {
+            filteredOptions.forEach(option => {
+                const item = document.createElement('div');
+                item.className = 'cursor-pointer px-4 py-2 hover:bg-blue-100 flex items-center';
+                
+                const isChecked = activeFilters[filterType].includes(option);
+                item.innerHTML = `
+                    <input type="checkbox" data-value="${option}" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"${isChecked ? 'checked' : ''}>
+                    <label class="ml-2 block text-gray-900">${option}</label>
+                `;
+                item.addEventListener('click', (e) => {
+                    const checkbox = item.querySelector('input');
+                    checkbox.checked = !checkbox.checked;
+                    updateActiveFilters(filterType, option, checkbox.checked);
+                });
+                dropdownElement.appendChild(item);
+            });
+        }
+        dropdownElement.classList.remove('hidden');
+    };
+
+    inputElement.addEventListener('input', (e) => {
+        renderOptions(e.target.value);
     });
 
-    options.forEach(option => {
-        const div = document.createElement('div');
-        div.className = 'flex items-center px-4 py-2 hover:bg-gray-100';
-        div.innerHTML = `
-            <input type="checkbox" id="${container.id}-${option.replace(/\s/g, '-')}" name="filter-option" value="${option}" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-            <label for="${container.id}-${option.replace(/\s/g, '-')}" class="ml-2 block text-gray-900">${option}</label>
-        `;
-        container.appendChild(div);
+    inputElement.addEventListener('focus', () => {
+        renderOptions(inputElement.value);
     });
 
-    container.querySelectorAll('input[name="filter-option"]').forEach(checkbox => {
-        checkbox.addEventListener('change', applyFiltersAndSearch);
+    document.addEventListener('click', (e) => {
+        if (!dropdownElement.contains(e.target) && e.target !== inputElement) {
+            dropdownElement.classList.add('hidden');
+        }
     });
 }
+
+function updateActiveFilters(filterType, value, isChecked) {
+    if (isChecked) {
+        if (!activeFilters[filterType].includes(value)) {
+            activeFilters[filterType].push(value);
+        }
+    } else {
+        activeFilters[filterType] = activeFilters[filterType].filter(item => item !== value);
+    }
+}
+
+// Show/Hide Filter Modal
+filterBtn.addEventListener('click', () => {
+    filterModal.classList.remove('hidden');
+    // Setup filter dropdowns when modal is opened
+    setupFilterDropdown(storeFilterInput, storeFilterDropdown, supermarkets, 'store');
+    setupFilterDropdown(categoryFilterInput, categoryFilterDropdown, categories, 'category');
+    setupFilterDropdown(typeFilterInput, typeFilterDropdown, itemTypes, 'type');
+});
+
+closeFilterModal.addEventListener('click', () => {
+    filterModal.classList.add('hidden');
+});
+
+applyFiltersBtn.addEventListener('click', () => {
+    filterModal.classList.add('hidden');
+    applyFiltersAndSearch();
+});
+
+clearFiltersBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    activeFilters = {
+        store: [],
+        category: [],
+        type: []
+    };
+    applyFiltersAndSearch();
+});
 
 // Apply filters and search
 function applyFiltersAndSearch() {
     const searchTerm = searchInput.value.toLowerCase();
-    const selectedStores = getSelectedValues('store-filter-options');
-    const selectedCategories = getSelectedValues('category-filter-options');
-    const selectedTypes = getSelectedValues('type-filter-options');
-
+    
     const filteredItems = allItems.filter(item => {
         const matchesSearch = item.name.toLowerCase().includes(searchTerm) ||
                                (item.description && item.description.toLowerCase().includes(searchTerm)) ||
                                item.category.toLowerCase().includes(searchTerm) ||
                                item.store.toLowerCase().includes(searchTerm);
 
-        const matchesStore = selectedStores.length === 0 || selectedStores.includes(item.store);
-        const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(item.category);
-        const matchesType = selectedTypes.length === 0 || selectedTypes.includes(item.type);
+        const matchesStore = activeFilters.store.length === 0 || activeFilters.store.includes(item.store);
+        const matchesCategory = activeFilters.category.length === 0 || activeFilters.category.includes(item.category);
+        const matchesType = activeFilters.type.length === 0 || activeFilters.type.includes(item.type);
 
         return matchesSearch && matchesStore && matchesCategory && matchesType;
     });
@@ -632,7 +683,7 @@ function setupRealtimeItemListener() {
 
         allItems.sort((a, b) => new Date(b.submissionDate) - new Date(a.submissionDate));
 
-        populateUIFromData();
+        // The UI is now populated based on the activeFilters and search term
         applyFiltersAndSearch();
     }, (error) => {
         console.error("Error fetching documents: ", error);
@@ -832,31 +883,6 @@ document.addEventListener('click', async (e) => {
     }
 });
 
-// Multi-select filter dropdown logic
-const filterContainers = document.querySelectorAll('.relative.inline-block');
-filterContainers.forEach(container => {
-    const button = container.querySelector('button');
-    const options = container.querySelector('[role="menu"]');
-    button.addEventListener('click', (event) => {
-        event.stopPropagation();
-        filterContainers.forEach(otherContainer => {
-            if (otherContainer !== container) {
-                otherContainer.querySelector('[role="menu"]').classList.add('hidden');
-            }
-        });
-        options.classList.toggle('hidden');
-    });
-});
-
-// Close dropdowns when clicking outside
-document.addEventListener('click', (event) => {
-    filterContainers.forEach(container => {
-        if (!container.contains(event.target)) {
-            container.querySelector('[role="menu"]').classList.add('hidden');
-        }
-    });
-});
-
 // Event listeners for search
 searchInput.addEventListener('input', applyFiltersAndSearch);
 
@@ -884,3 +910,6 @@ window.addEventListener('user-signed-out', () => {
     itemCardsContainer.innerHTML = '';
     comparisonCardsContainer.innerHTML = '';
 });
+
+// Initial function call
+populateUIFromData();
