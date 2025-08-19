@@ -1,11 +1,11 @@
 const CACHE_NAME = 'aisle9-cache-v1.2.4';
 const urlsToCache = [
-    '/aisle9/',
-    '/aisle9/index.html',
-    '/aisle9/css/styles.css',
-    '/aisle9/js/app.js',
-    '/aisle9/js/login.js',
-    '/aisle9/js/firebase-config.js',
+    '/',
+    '/index.html',
+    '/css/styles.css',
+    '/js/app.js',
+    '/js/login.js',
+    '/js/firebase-config.js',
 ];
 
 // Install Event: Caches all static assets, gracefully handling errors
