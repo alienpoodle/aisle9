@@ -1,3 +1,6 @@
+// js/login.js
+// This script handles all user authentication logic (login, signup) and user data.
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -98,7 +101,7 @@ signupForm.addEventListener('submit', async (e) => {
         const generatedUsername = generateRandomUsername();
 
         // Store the username in Firestore
-        const userRef = doc(db, 'users', user.uid);
+        const userRef = doc(db, 'users', user.uid); // <--- CHANGE THIS LINE
         await setDoc(userRef, {
             username: generatedUsername,
             email: user.email,
@@ -128,7 +131,7 @@ logoutBtn.addEventListener('click', async () => {
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         // User is signed in, get username and dispatch event
-        const userRef = doc(db, 'users', user.uid);
+        const userRef = doc(db, 'users', user.uid); // <--- CHANGE THIS LINE
         const userSnap = await getDoc(userRef);
 
         let username = user.email; // Fallback to email
