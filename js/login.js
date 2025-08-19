@@ -47,11 +47,11 @@ authTabBtns.forEach(btn => {
         btn.classList.add('active', 'border-blue-600', 'text-blue-600');
         btn.classList.remove('text-gray-500');
 
-        if (btn.innerText === 'Login') {
+        if (btn.innerText.trim() === 'Login') {
             loginForm.classList.remove('hidden');
             signupForm.classList.add('hidden');
             authTitle.textContent = 'Welcome!';
-        } else {
+        } else if (btn.innerText.trim() === 'Sign Up') {
             loginForm.classList.add('hidden');
             signupForm.classList.remove('hidden');
             authTitle.textContent = 'Create an Account';
@@ -98,7 +98,6 @@ signupForm.addEventListener('submit', async (e) => {
         const generatedUsername = generateRandomUsername();
 
         // Store the username in Firestore
-        // FIX: CHANGE THE FIREBASE PATH TO A STANDARD USERS COLLECTION
         const userRef = doc(db, 'users', user.uid);
         await setDoc(userRef, {
             username: generatedUsername,
@@ -129,7 +128,6 @@ logoutBtn.addEventListener('click', async () => {
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         // User is signed in, get username and dispatch event
-        // FIX: CHANGE THE FIREBASE PATH TO A STANDARD USERS COLLECTION
         const userRef = doc(db, 'users', user.uid);
         const userSnap = await getDoc(userRef);
 
