@@ -1,9 +1,24 @@
+// Add this code to the top of js/app.js
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/aisle9/service-worker.js')
+            .then(registration => {
+                console.log('Service Worker registered: ', registration.scope);
+            })
+            .catch(err => {
+                console.log('Service Worker registration failed: ', err);
+            });
+    });
+}
+
+// Corrected import path for page.mjs
+import page from '../lib/page.mjs';
+
 import * as GlobalModel from './model.js';
 import * as GlobalView from './view.js';
 import * as ListingsController from './listings/listings-controller.js';
 import * as ComparisonsController from './comparisons/comparisons-controller.js';
 import * as ShoppingListController from './shopping-list/shopping-list-controller.js';
-import page from 'https://unpkg.com/page/page.mjs';
 
 const contentContainer = document.getElementById('content-container');
 const tabButtons = document.querySelectorAll('.tab-btn');
@@ -77,17 +92,4 @@ async function handleSignup(username, email, password) {
 
 async function handleLogout() {
     await GlobalModel.logoutUser();
-}
-
-
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/aisle9/service-worker.js')
-            .then(registration => {
-                console.log('Service Worker registered: ', registration.scope);
-            })
-            .catch(err => {
-                console.log('Service Worker registration failed: ', err);
-            });
-    });
 }
