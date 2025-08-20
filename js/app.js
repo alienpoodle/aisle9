@@ -1,6 +1,7 @@
+// Service worker registration.
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/aisle9/service-worker.js')
+        navigator.serviceWorker.register('https://alienpoodle.github.io/aisle9/service-worker.js')
             .then(registration => {
                 console.log('Service Worker registered: ', registration.scope);
             })
@@ -10,14 +11,13 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-// Corrected import path for page.mjs
-import page from './lib/page.mjs';
-
-import * as GlobalModel from './model.js';
-import * as GlobalView from './view.js';
-import * as ListingsController from './listings/listings-controller.js';
-import * as ComparisonsController from './comparisons/comparisons-controller.js';
-import * as ShoppingListController from './shopping-list/shopping-list-controller.js';
+// Absolute import paths for all modules.
+import page from 'https://alienpoodle.github.io/aisle9/js/lib/page.mjs';
+import * as GlobalModel from 'https://alienpoodle.github.io/aisle9/js/model.js';
+import * as GlobalView from 'https://alienpoodle.github.io/aisle9/js/view.js';
+import * as ListingsController from 'https://alienpoodle.github.io/aisle9/js/listings/listings-controller.js';
+import * as ComparisonsController from 'https://alienpoodle.github.io/aisle9/js/comparisons/comparisons-controller.js';
+import * as ShoppingListController from 'https://alienpoodle.github.io/aisle9/js/shopping-list/shopping-list-controller.js';
 
 const contentContainer = document.getElementById('content-container');
 const tabButtons = document.querySelectorAll('.tab-btn');
