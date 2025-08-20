@@ -1,4 +1,3 @@
-// Add this code to the top of js/app.js
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/aisle9/service-worker.js')
