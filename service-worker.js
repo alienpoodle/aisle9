@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aisle9-cache-v1.2.9';
+const CACHE_NAME = 'aisle9-cache-v1.3.0';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -7,6 +7,7 @@ const urlsToCache = [
     '/js/model.js',
     '/js/view.js',
     '/js/firebase-config.js',
+    '/js/lib/page.mjs'
     '/js/data/initial-data.js',
     '/js/listings/listings-controller.js',
     '/js/listings/listings-model.js',
@@ -21,7 +22,6 @@ const urlsToCache = [
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css',
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
     'https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800',
-    'https://unpkg.com/page/page.mjs'
 ];
 
 self.addEventListener('install', event => {
