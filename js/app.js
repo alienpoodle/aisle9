@@ -11,7 +11,7 @@ if ('serviceWorker' in navigator) {
 }
 
 // Corrected import path for page.mjs
-import page from '../lib/page.mjs';
+import page from './lib/page.mjs';
 
 import * as GlobalModel from './model.js';
 import * as GlobalView from './view.js';
