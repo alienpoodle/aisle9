@@ -1,10 +1,12 @@
-const CACHE_NAME = 'aisle9-cache-v1.2.4';
+const CACHE_NAME = 'aisle9-cache-v1.2.5';
 const urlsToCache = [
     '/',
     '/index.html',
     '/css/styles.css',
+    '/css/menu.css',
     '/js/app.js',
     '/js/login.js',
+    '/js/firebase.js',
     '/js/firebase-config.js',
 ];
 
