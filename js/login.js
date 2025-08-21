@@ -1,164 +1,128 @@
-// js/login.js
-// This script handles all user authentication logic (login, signup) and user data.
+import { auth, db } from './firebase.js';
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signInWithPopup,
+    GoogleAuthProvider,
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-import { firebaseConfig } from './firebase-config.js';
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const appId = "aisle-9-6f7d1"; // Using the same app ID
-
-// DOM Elements for Auth Page
 const authPage = document.getElementById('auth-page');
 const appContainer = document.getElementById('app-container');
 const loginForm = document.getElementById('login-form');
+const loginEmailInput = document.getElementById('login-email');
+const loginPasswordInput = document.getElementById('login-password');
 const signupForm = document.getElementById('signup-form');
-const authTabBtns = document.querySelectorAll('.auth-tab-btn');
-const authTitle = document.getElementById('auth-title');
+const signupUsernameInput = document.getElementById('signup-username');
+const signupEmailInput = document.getElementById('signup-email');
+const signupPasswordInput = document.getElementById('signup-password');
+const googleLoginBtn = document.getElementById('google-login-btn');
 const logoutBtn = document.getElementById('logout-btn');
 
-// Show/Hide custom message box
-function showMessageBox(message) {
-    document.getElementById('message-text').innerText = message;
-    document.getElementById('message-box').classList.remove('hidden');
-}
+async function createNewUserInDb(userId, username) {
+    const userRef = doc(db, "users", userId);
+    const userDoc = await getDoc(userRef);
 
-// Function to generate a random username
-function generateRandomUsername() {
-    const animals = ['Panda', 'Tiger', 'Lion', 'Eagle', 'Wolf', 'Fox', 'Bear', 'Shark', 'Dolphin', 'Giraffe'];
-    const randomNumber = Math.floor(Math.random() * 100);
-    const randomAnimal = animals[Math.floor(Math.random() * animals.length)];
-    return `user${randomNumber}-${randomAnimal}`;
-}
-
-// Password validation regex
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+~`|}{[\]:;"'<,>.?/=-])(?=.{12,})/;
-
-// Toggle between Login and Signup forms
-authTabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        authTabBtns.forEach(b => {
-            b.classList.remove('active', 'border-blue-600', 'text-blue-600', 'hover:text-gray-700');
-            b.classList.add('text-gray-500');
+    if (!userDoc.exists()) {
+        await setDoc(userRef, {
+            username: username
         });
-        btn.classList.add('active', 'border-blue-600', 'text-blue-600');
-        btn.classList.remove('text-gray-500');
+    }
+}
 
-        if (btn.innerText === 'Login') {
-            loginForm.classList.remove('hidden');
-            signupForm.classList.add('hidden');
-            authTitle.textContent = 'Welcome!';
-        } else {
-            loginForm.classList.add('hidden');
-            signupForm.classList.remove('hidden');
-            authTitle.textContent = 'Create an Account';
-        }
-    });
+function showApp() {
+    authPage.classList.add('hidden');
+    appContainer.classList.remove('hidden');
+}
+
+function showAuth() {
+    authPage.classList.remove('hidden');
+    appContainer.classList.add('hidden');
+}
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        showApp();
+        window.dispatchEvent(new CustomEvent('user-authenticated', {
+            detail: {
+                userId: user.uid,
+                username: user.displayName || user.email
+            }
+        }));
+    } else {
+        showAuth();
+        window.dispatchEvent(new CustomEvent('user-signed-out'));
+    }
 });
 
-// Handle Login Form Submission
+// Event Listeners
 loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const email = loginForm['login-email'].value;
-    const password = loginForm['login-password'].value;
-    
+    const email = loginEmailInput.value;
+    const password = loginPasswordInput.value;
     try {
         await signInWithEmailAndPassword(auth, email, password);
-        showMessageBox("Logged in successfully!");
-        loginForm.reset();
+        // On success, the onAuthStateChanged listener handles the UI.
     } catch (error) {
-        console.error("Login failed:", error);
-        showMessageBox(`Login failed: ${error.message}`);
+        alert(error.message);
     }
 });
 
-// Handle Signup Form Submission
 signupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const email = signupForm['signup-email'].value;
-    const password = signupForm['signup-password'].value;
-    const confirmPassword = signupForm['signup-confirm-password'].value;
-    const username = signupForm['signup-username'].value.trim();
-
-    if (password !== confirmPassword) {
-        showMessageBox("Passwords do not match.");
-        return;
-    }
-
-    if (!passwordRegex.test(password)) {
-        showMessageBox("Password must be 12+ characters and contain at least one uppercase letter, one lowercase letter, one number, and one symbol.");
-        return;
-    }
-    if (!username || username.length < 3 || username.length > 24) {
-        showMessageBox("Username must be 3-24 characters and contain only letters, numbers, underscores, or hyphens.");
-        return;
-    }
+    const email = signupEmailInput.value;
+    const password = signupPasswordInput.value;
+    const username = signupUsernameInput.value;
 
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-
-        // Store the username in Firestore
-        const userRef = doc(db, `artifacts/${appId}/public/data/users`, user.uid);
-        await setDoc(userRef, {
-            username: username,
-            email: user.email,
-            createdAt: new Date().toISOString()
-        });
-
-        showMessageBox("Account created and logged in successfully!");
-        signupForm.reset();
+        await createNewUserInDb(user.uid, username);
+        // On success, the onAuthStateChanged listener handles the UI.
     } catch (error) {
-        console.error("Signup failed:", error);
-        showMessageBox(`Signup failed: ${error.message}`);
+        alert(error.message);
     }
 });
 
-// Handle Log Out
+googleLoginBtn.addEventListener('click', async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        await createNewUserInDb(user.uid, user.displayName);
+        // On success, the onAuthStateChanged listener handles the UI.
+    } catch (error) {
+        alert(error.message);
+    }
+});
+
 logoutBtn.addEventListener('click', async () => {
     try {
         await signOut(auth);
-        showMessageBox("Logged out successfully.");
+        // On success, the onAuthStateChanged listener handles the UI.
     } catch (error) {
-        console.error("Logout failed:", error);
-        showMessageBox(`Logout failed: ${error.message}`);
+        alert(error.message);
     }
 });
 
-// Listen for auth state changes
-onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        // User is signed in, get username and dispatch event
-        const userRef = doc(db, `artifacts/${appId}/public/data/users`, user.uid);
-        const userSnap = await getDoc(userRef);
+// Event listeners for auth tabs to toggle forms
+document.querySelectorAll('.auth-tab-btn').forEach(button => {
+    button.addEventListener('click', (e) => {
+        // Remove active class from all buttons and add to the clicked one
+        document.querySelectorAll('.auth-tab-btn').forEach(btn => btn.classList.remove('active', 'border-blue-600', 'text-blue-600'));
+        e.target.classList.add('active', 'border-blue-600', 'text-blue-600');
 
-        let username = user.email; // Fallback to email
-        if (userSnap.exists()) {
-            username = userSnap.data().username;
+        // Toggle form visibility
+        if (e.target.textContent.trim() === 'Login') {
+            document.getElementById('login-form').classList.remove('hidden');
+            document.getElementById('signup-form').classList.add('hidden');
+            document.getElementById('auth-title').textContent = 'Welcome!';
+        } else {
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('signup-form').classList.remove('hidden');
+            document.getElementById('auth-title').textContent = 'Join Aisle 9!';
         }
-
-        authPage.classList.add('hidden');
-        appContainer.classList.remove('hidden');
-        
-        // Dispatch a custom event with user data to app.js
-        const event = new CustomEvent('user-authenticated', {
-            detail: {
-                userId: user.uid,
-                username: username
-            }
-        });
-        window.dispatchEvent(event);
-
-    } else {
-        // User is signed out, show auth page and hide app
-        authPage.classList.remove('hidden');
-        appContainer.classList.add('hidden');
-        
-        // Dispatch a sign-out event to app.js
-        window.dispatchEvent(new Event('user-signed-out'));
-    }
+    });
 });
