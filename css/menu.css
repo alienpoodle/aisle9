@@ -1,0 +1,20 @@
+.hamburger-line {
+    transition-property: transform;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 0.15s;
+    transition-delay: 0.15s;
+    animation-fill-mode: forwards;
+}
+
+.nav-open .nav-item:first-child { transition-duration: 0.15s; }
+.nav-open .nav-item:nth-child(2) { transition-duration: 0.3s; }
+.nav-open .nav-item:nth-child(3) { transition-duration: 0.45s; }
+.nav-open .nav-item:nth-child(4) { transition-duration: 0.6s; }
+.nav-open .nav-item:last-child { transition-duration: 0.75s; }
+
+@keyframes hamburger { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }
+@keyframes hamburgerOpen { 0% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
+@keyframes hamburgerFirst { 0% { top: 0; transform: rotate(45deg); } 50% { top: 0; transform: rotate(0); } 100% { top: 10px; transform: rotate(0); } }
+@keyframes hamburgerLast { 0% { top: 0; transform: rotate(-45deg); } 50% { top: 0; transform: rotate(0); } 100% { top: -10px; transform: rotate(0); } }
+@keyframes hamburgerFirstOpen { 0% { top: 10px; transform: rotate(0); } 50% { top: 0; transform: rotate(0); } 100% { top: 0; transform: rotate(45deg); } }
+@keyframes hamburgerLastOpen { 0% { top: -12px; transform: rotate(0); } 50% { top: 0; transform: rotate(0); } 100% { top: 0; transform: rotate(-45deg); } }

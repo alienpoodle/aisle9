@@ -1,222 +1,234 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aisle 9 - Price Listing App</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aisle 9 - Price Listing App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800">
 
-    <link rel="stylesheet" href="css/styles.css">
-
-    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/menu.css">
+    
+    <link rel="manifest" href="manifest.json">
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <section id="auth-page" class="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto transform transition-all duration-500">
-            <h2 id="auth-title" class="text-4xl font-bold text-center text-gray-900 mb-6">Welcome!</h2>
-            <div id="auth-toggle" class="flex justify-center mb-6">
-                <button class="auth-tab-btn active text-lg font-semibold px-4 py-2 border-b-2 border-blue-600 text-blue-600 transition-colors duration-300">Login</button>
-                <button class="auth-tab-btn text-lg font-semibold px-4 py-2 text-gray-500 hover:text-gray-700 transition-colors duration-300">Sign Up</button>
-            </div>
+    <section id="auth-page" class="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">Aisle 9</h2>
+            <p class="text-center text-gray-600 mb-6">Price Listing App</p>
 
-            <form id="login-form" class="space-y-4">
-                <div>
-                    <label for="login-email" class="block text-sm font-medium text-gray-700">Email Address</label>
-                    <input type="email" id="login-email" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
-                </div>
-                <div>
-                    <label for="login-password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" id="login-password" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
-                </div>
-                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:bg-blue-700 transition duration-300">Log In</button>
-            </form>
-
-            <form id="signup-form" class="space-y-4 hidden">
-                <div>
-                    <label for="signup-username" class="block font-medium text-gray-700">Username</label>
-                    <input type="text" id="signup-username" name="signup-username" required minlength="3" maxlength="24" pattern="[A-Za-z0-9_\-]+" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Choose a username">
-                </div>
-                <div>
-                    <label for="signup-email" class="block text-sm font-medium text-gray-700">Email Address</label>
-                    <input type="email" id="signup-email" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
-                </div>
-                <div>
-                    <label for="signup-password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" id="signup-password" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
-                </div>
-                <div>
-                    <label for="signup-confirm-password" class="block text-sm font-medium text-gray-700">Confirm Password</label>
-                    <input type="password" id="signup-confirm-password" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
-                </div>
-                <button type="submit" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:bg-green-700 transition duration-300">Sign Up</button>
-            </form>
-        </div>
-    </section>
-
-    <div id="app-container" class="hidden min-h-screen flex flex-col">
-        <header class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 shadow-xl">
-            <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center">
-                <h1 class="text-3xl font-bold mb-2 sm:mb-0">Aisle 9 <i class="fas fa-shopping-basket ml-2"></i></h1>
-                <div class="flex items-center space-x-4 mt-2 sm:mt-0">
-                    <span id="user-display" class="text-lg font-semibold bg-blue-700 px-3 py-1 rounded-full shadow-lg hidden"></span>
-                    <button id="add-item-btn" class="bg-white text-blue-600 px-4 py-2 rounded-full shadow-lg hover:bg-blue-50 transition duration-300 flex items-center text-sm">
-                        <i class="fas fa-plus-circle mr-2"></i> Add Item
-                    </button>
-                    <button id="logout-btn" class="bg-red-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-red-700 transition duration-300 flex items-center text-sm">
-                        <i class="fas fa-sign-out-alt mr-2"></i> Log Out
-                    </button>
-                </div>
-            </div>
-        </header>
-
-        <main class="container mx-auto p-4 flex-grow">
-            <section class="bg-white rounded-xl shadow-lg p-6 mb-6">
-                <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
-                    <div class="relative w-full md:w-3/4">
-                        <input type="text" id="search-input" placeholder="Search for items..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
-                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg"></i>
-                    </div>
-                    <div class="w-full md:w-1/4 flex flex-wrap gap-2 justify-end">
-                        <div class="relative inline-block text-left w-full sm:w-auto z-40" id="store-filter-container">
-                            <button type="button" class="inline-flex justify-between w-full rounded-lg border border-gray-300 shadow-md px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" id="store-filter-btn">
-                                Stores
-                                <i class="fas fa-chevron-down ml-2 -mr-1 text-gray-500 text-sm"></i>
-                            </button>
-                            <div class="origin-top-right absolute right-0 mt-2 w-full sm:w-64 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 hidden text-base" role="menu" aria-orientation="vertical" id="store-filter-options">
-                                </div>
-                        </div>
-                        <div class="relative inline-block text-left w-full sm:w-auto z-30" id="category-filter-container">
-                            <button type="button" class="inline-flex justify-between w-full rounded-lg border border-gray-300 shadow-md px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" id="category-filter-btn">
-                                Categories
-                                <i class="fas fa-chevron-down ml-2 -mr-1 text-gray-500 text-sm"></i>
-                            </button>
-                            <div class="origin-top-right absolute right-0 mt-2 w-full sm:w-64 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 hidden text-base" role="menu" aria-orientation="vertical" id="category-filter-options">
-                                </div>
-                        </div>
-                        <div class="relative inline-block text-left w-full sm:w-auto z-20" id="type-filter-container">
-                            <button type="button" class="inline-flex justify-between w-full rounded-lg border border-gray-300 shadow-md px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" id="type-filter-btn">
-                                Types
-                                <i class="fas fa-chevron-down ml-2 -mr-1 text-gray-500 text-sm"></i>
-                            </button>
-                            <div class="origin-top-right absolute right-0 mt-2 w-full sm:w-64 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 hidden text-base" role="menu" aria-orientation="vertical" id="type-filter-options">
-                                </div>
-                        </div>
-                    </div>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <input type="email" id="login-email" placeholder="Email" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-            </section>
+                <div>
+                    <input type="password" id="login-password" placeholder="Password" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <button type="submit" id="login-btn"
+                    class="w-full py-3 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700 transition duration-300">Login</button>
+            </form>
 
-            <div class="flex bg-gray-100 rounded-t-lg shadow-md mb-4">
-                <button id="tab-listings" class="tab-btn flex-1 px-4 py-3 text-center text-sm font-medium text-gray-700 hover:bg-gray-200 rounded-tl-lg transition duration-200 border-b-2 border-transparent">
-                    Item Listings
-                </button>
-                <button id="tab-comparisons" class="tab-btn flex-1 px-4 py-3 text-center text-sm font-medium text-gray-700 hover:bg-gray-200 rounded-tr-lg transition duration-200 border-b-2 border-transparent">
-                    Price Comparisons
-                </button>
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600">Don't have an account? <a href="#" id="show-signup" class="text-blue-600 font-medium hover:underline">Sign Up</a></p>
+                <div class="mt-4 flex items-center justify-center space-x-4">
+                    <button type="button" id="google-login-btn"
+                        class="p-3 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-300">
+                        <i class="fab fa-google text-lg"></i>
+                    </button>
+                </div>
             </div>
 
-            <section id="item-listings-view" class="bg-white rounded-lg shadow-lg p-6">
-                <h2 class="text-2xl font-semibold mb-4 text-gray-800">Grocery Price Listings</h2>
-                <div id="loading-indicator" class="text-center text-gray-500 hidden text-sm">
-                    <i class="fas fa-spinner fa-spin text-blue-500 text-3xl"></i>
-                    <p class="mt-2">Loading items...</p>
-                </div>
-                <div id="no-items-message" class="text-center text-gray-500 hidden text-sm">
-                    <p>No items found matching your criteria.</p>
-                </div>
-                <div id="item-cards-container" class="flex flex-wrap -mx-4">
+            <div id="signup-container" class="hidden mt-8">
+                <h3 class="text-2xl font-bold text-center mb-4 text-gray-800">Sign Up</h3>
+                <form id="signup-form" class="space-y-4">
+                    <div>
+                        <input type="text" id="signup-username" placeholder="Username" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
-            </section>
+                    <div>
+                        <input type="email" id="signup-email" placeholder="Email" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <input type="password" id="signup-password" placeholder="Password" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <button type="submit" id="signup-btn"
+                        class="w-full py-3 bg-green-600 text-white rounded-md font-semibold hover:bg-green-700 transition duration-300">Sign Up</button>
+                </form>
+                <div class="mt-4 text-center">
+                    <p class="text-sm text-gray-600">Already have an account? <a href="#" id="show-login" class="text-blue-600 font-medium hover:underline">Login</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div id="app-container" class="hidden flex flex-col min-h-screen bg-gray-100">
 
-            <section id="price-comparison-view" class="bg-white rounded-lg shadow-lg p-6 hidden">
-                <h2 class="text-2xl font-semibold mb-4 text-gray-800">Price Comparisons</h2>
-                <div id="loading-comparison-indicator" class="text-center text-gray-500 hidden text-sm">
-                    <i class="fas fa-spinner fa-spin text-blue-500 text-3xl"></i>
-                    <p class="mt-2">Loading comparisons...</p>
+        <header class="bg-white shadow-sm p-4 sticky top-0 z-40">
+            <div class="flex justify-between items-center">
+                <h1 class="text-xl font-bold text-gray-800">Aisle 9</h1>
+                <div class="flex items-center space-x-4">
+                    <span id="user-display" class="text-gray-600 font-medium hidden"></span>
+                    <button id="sign-out-btn" class="text-red-500 hover:text-red-700 transition duration-300">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
                 </div>
-                <div id="no-comparison-items-message" class="text-center text-gray-500 hidden text-sm">
-                    <p>No items found for comparison matching your criteria.</p>
-                </div>
-                <div id="comparison-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+            </div>
+            <div class="mt-4 flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4">
+                <input type="text" id="search-input" placeholder="Search for items..." class="w-full md:flex-1 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                
+                <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full md:w-auto">
+                    <div class="relative w-full sm:w-1/3 md:w-auto filter-dropdown" id="category-filter">
+                        <button class="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 font-medium flex items-center justify-between" type="button">
+                            Category <i class="fas fa-chevron-down text-sm ml-2"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50" role="menu">
+                            <div class="py-1" id="category-filter-options"></div>
+                        </div>
                     </div>
-            </section>
+                    <div class="relative w-full sm:w-1/3 md:w-auto filter-dropdown" id="store-filter">
+                        <button class="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 font-medium flex items-center justify-between" type="button">
+                            Store <i class="fas fa-chevron-down text-sm ml-2"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50" role="menu">
+                            <div class="py-1" id="store-filter-options"></div>
+                        </div>
+                    </div>
+                    <div class="relative w-full sm:w-1/3 md:w-auto filter-dropdown" id="type-filter">
+                        <button class="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 font-medium flex items-center justify-between" type="button">
+                            Type <i class="fas fa-chevron-down text-sm ml-2"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50" role="menu">
+                            <div class="py-1" id="type-filter-options"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 border-b border-gray-300 flex justify-center space-x-2">
+                <button id="tab-listings" class="tab-btn active px-4 py-2 text-gray-600 font-semibold hover:text-blue-600 transition duration-300">
+                    <i class="fas fa-list-ul mr-2"></i>All Listings
+                </button>
+                <button id="tab-comparisons" class="tab-btn px-4 py-2 text-gray-600 font-semibold hover:text-blue-600 transition duration-300">
+                    <i class="fas fa-balance-scale-left mr-2"></i>Price Comparisons
+                </button>
+            </div>
+        </header>
+
+        <main class="flex-1 p-4 overflow-y-auto">
+            <div class="w-full max-w-7xl mx-auto">
+                
+                <div id="item-listings-view" class="space-y-6">
+                    <button id="add-item-btn" class="fixed bottom-24 right-8 bg-blue-600 text-white rounded-full p-4 shadow-lg hover:bg-blue-700 transition duration-300 z-50">
+                        <i class="fas fa-plus"></i>
+                    </button>
+
+                    <div id="loading-indicator" class="text-center text-gray-500 mt-8 hidden">
+                        <i class="fas fa-spinner fa-spin text-3xl"></i>
+                        <p class="mt-2">Loading items...</p>
+                    </div>
+                    <p id="no-items-message" class="text-center text-gray-500 mt-8 hidden">No items found matching your criteria.</p>
+
+                    <div id="item-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                </div>
+
+                <div id="price-comparison-view" class="space-y-6 hidden">
+                    <div id="loading-comparison-indicator" class="text-center text-gray-500 mt-8 hidden">
+                        <i class="fas fa-spinner fa-spin text-3xl"></i>
+                        <p class="mt-2">Generating comparisons...</p>
+                    </div>
+                    <p id="no-comparison-items-message" class="text-center text-gray-500 mt-8 hidden">No items available for comparison. Try adding more items.</p>
+
+                    <div id="comparison-cards-container" class="grid grid-cols-1 gap-6"></div>
+                </div>
+
+            </div>
         </main>
 
         <div id="add-item-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden">
-            <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg mx-4">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-semibold text-gray-800">Add New Item Listing</h3>
-                    <button id="close-add-item-modal" class="text-gray-500 hover:text-gray-700 text-2xl leading-none">&times;</button>
+            <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md mx-4 transform transition-all scale-100 ease-out duration-300">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-gray-800">Add New Item</h3>
+                    <button id="close-add-item-modal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
-                <form id="add-item-form" class="space-y-4 text-sm">
+                <form id="add-item-form" class="space-y-4">
                     <div>
-                        <label for="item-name" class="block font-medium text-gray-700">Item Name</label>
-                        <input type="text" id="item-name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <label for="item-name" class="block text-sm font-medium text-gray-700">Item Name</label>
+                        <input type="text" id="item-name" required
+                            class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
-                        <label for="item-description" class="block font-medium text-gray-700">Description</label>
-                        <textarea id="item-description" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                        <label for="item-description" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea id="item-description" rows="3"
+                            class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
                     </div>
                     <div>
-                        <label for="item-category" class="block font-medium text-gray-700">Category</label>
-                        <select id="item-category" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            <option value="" disabled selected>Select Category</option>
-                        </select>
+                        <label for="item-price" class="block text-sm font-medium text-gray-700">Price (EC$)</label>
+                        <input type="number" id="item-price" step="0.01" required
+                            class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="relative">
+                        <label for="item-category-input" class="block text-sm font-medium text-gray-700">Category</label>
+                        <input type="text" id="item-category-input" placeholder="Select a category" required
+                               class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <div id="item-category-dropdown" class="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1 max-h-48 overflow-y-auto hidden"></div>
+                        <input type="hidden" id="item-category">
+                    </div>
+                    <div class="relative">
+                        <label for="item-store-input" class="block text-sm font-medium text-gray-700">Store</label>
+                        <input type="text" id="item-store-input" placeholder="Select a store" required
+                               class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <div id="item-store-dropdown" class="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1 max-h-48 overflow-y-auto hidden"></div>
+                        <input type="hidden" id="item-store">
                     </div>
                     <div>
-                        <label for="item-store" class="block font-medium text-gray-700">Store</label>
-                        <select id="item-store" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            <option value="" disabled selected>Select Store</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="item-type" class="block font-medium text-gray-700">Type</label>
-                        <select id="item-type" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            <option value="" disabled selected>Select Type</option>
+                        <label for="item-type" class="block text-sm font-medium text-gray-700">Type</label>
+                        <select id="item-type" required
+                            class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                             <option value="Local">Local</option>
                             <option value="Imported">Imported</option>
                         </select>
                     </div>
-                    <div>
-                        <label for="item-price" class="block font-medium text-gray-700">Price (XCD$)</label>
-                        <input type="number" id="item-price" step="0.01" min="0" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="flex justify-end space-x-2 mt-6">
-                        <button type="button" id="cancel-add-item" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition duration-300">Cancel</button>
-                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300">Submit Listing</button>
+                    <div class="flex justify-end space-x-4 mt-4">
+                        <button type="button" id="cancel-add-item" class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition duration-300">Cancel</button>
+                        <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300">Add Item</button>
                     </div>
                 </form>
             </div>
         </div>
 
         <div id="item-details-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden">
-            <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg mx-4">
-                <div class="flex flex-col gap-6">
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-start mb-4">
-                            <h3 id="detail-item-name" class="text-3xl font-bold text-gray-900"></h3>
-                            <button id="close-item-details-modal" class="text-gray-500 hover:text-gray-700 text-2xl leading-none">&times;</button>
-                        </div>
-                        <div class="space-y-4 text-gray-700">
-                            <p class="text-base"><strong class="font-semibold text-gray-800">Description:</strong> <span id="detail-item-description"></span></p>
-                            <div class="flex flex-wrap gap-2 text-xs font-medium">
-                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full"><strong class="font-semibold">Category:</strong> <span id="detail-item-category"></span></span>
-                                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full"><strong class="font-semibold">Store:</strong> <span id="detail-item-store"></span></span>
-                                <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full"><strong class="font-semibold">Type:</strong> <span id="detail-item-type"></span></span>
-                            </div>
-                            <p class="text-3xl font-bold text-blue-600"><span id="detail-item-price"></span></p>
-                            <div class="flex items-center space-x-4 mt-4">
-                                <span class="flex items-center text-green-600 text-base"><i class="fas fa-thumbs-up mr-2"></i> <span id="detail-upvotes"></span> Confirmed</span>
-                                <span class="flex items-center text-red-600 text-base"><i class="fas fa-thumbs-down mr-2"></i> <span id="detail-downvotes"></span> Disagreed</span>
-                            </div>
-                            <p class="text-gray-500 text-xs mt-2"><strong class="font-medium">Submitted On:</strong> <span id="detail-item-date"></span></p>
-                        </div>
-                        <div class="flex justify-end mt-6">
-                            <button id="ok-item-details-modal" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300">OK</button>
-                        </div>
+            <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md mx-4 transform transition-all scale-100 ease-out duration-300">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-gray-800">Item Details</h3>
+                    <button id="close-item-details-modal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <p><strong>Item:</strong> <span id="detail-item-name"></span></p>
+                    <p><strong>Description:</strong> <span id="detail-item-description"></span></p>
+                    <p><strong>Price:</strong> <span id="detail-item-price"></span></p>
+                    <p><strong>Category:</strong> <span id="detail-item-category"></span></p>
+                    <p><strong>Store:</strong> <span id="detail-item-store"></span></p>
+                    <p><strong>Type:</strong> <span id="detail-item-type"></span></p>
+                    <p><strong>Submitted by:</strong> <span id="detail-item-submitted-by"></span></p>
+                    <p><strong>Date Added:</strong> <span id="detail-item-date"></span></p>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-green-600">Upvotes: <span id="detail-upvotes">0</span></span>
+                        <span class="text-red-600">Downvotes: <span id="detail-downvotes">0</span></span>
+                    </div>
+                    <div class="flex justify-end mt-4">
+                        <button id="ok-item-details-modal" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300">OK</button>
                     </div>
                 </div>
             </div>
@@ -229,7 +241,38 @@
             </div>
         </div>
     </div>
-
+    
+    <div id="sidebar" class="fixed z-50 bottom-8 right-4">
+        <div id="hamburgerButton" class="flex items-center justify-center w-15 h-15 rounded-md bg-[#1950FF] transition-all cursor-pointer hover:bg-[#0036E0]">
+            <div id="hamburgerIcon" class="relative w-1/2">
+                <div class="hamburger-line w-full h-[3px] rounded-sm bg-white first:absolute first:top-0 first:origin-center last:absolute last:top-0 last:origin-center transition-all"></div>
+                <div class="hamburger-line h-[3px] rounded-sm bg-white"></div>
+                <div class="hamburger-line w-full h-[3px] rounded-sm bg-white"></div>
+            </div>
+        </div>
+        <nav id="nav" class="nav">
+            <a href="#" class="nav-item flex items-center justify-center w-15 h-15 cursor-pointer bg-[#1950FF] transition-all hover:bg-[#0036E0] last:rounded-t-md">
+                <i class="fas fa-shopping-basket text-white w-6 h-6 stroke-2-5"></i>
+                <span class="nav-item-text text-[#1950FF] absolute right-[105%] opacity-0 invisible cursor-default pointer-events-none text-lg font-medium whitespace-nowrap transition-all hover:right-[120%] hover:opacity-100 hover:visible">Shop</span>
+            </a>
+            <a href="#" class="nav-item flex items-center justify-center w-15 h-15 cursor-pointer bg-[#1950FF] transition-all hover:bg-[#0036E0]">
+                <i class="fas fa-search-location text-white w-6 h-6 stroke-2-5"></i>
+                <span class="nav-item-text text-[#1950FF] absolute right-[105%] opacity-0 invisible cursor-default pointer-events-none text-lg font-medium whitespace-nowrap transition-all hover:right-[120%] hover:opacity-100 hover:visible">Find Store</span>
+            </a>
+            <a href="#" class="nav-item flex items-center justify-center w-15 h-15 cursor-pointer bg-[#1950FF] transition-all hover:bg-[#0036E0]">
+                <i class="fas fa-user-circle text-white w-6 h-6 stroke-2-5"></i>
+                <span class="nav-item-text text-[#1950FF] absolute right-[105%] opacity-0 invisible cursor-default pointer-events-none text-lg font-medium whitespace-nowrap transition-all hover:right-[120%] hover:opacity-100 hover:visible">Profile</span>
+            </a>
+            <a href="#" class="nav-item flex items-center justify-center w-15 h-15 cursor-pointer bg-[#1950FF] transition-all hover:bg-[#0036E0]">
+                <i class="fas fa-bell text-white w-6 h-6 stroke-2-5"></i>
+                <span class="nav-item-text text-[#1950FF] absolute right-[105%] opacity-0 invisible cursor-default pointer-events-none text-lg font-medium whitespace-nowrap transition-all hover:right-[120%] hover:opacity-100 hover:visible">Notifications</span>
+            </a>
+            <a href="#" class="nav-item flex items-center justify-center w-15 h-15 cursor-pointer bg-[#1950FF] transition-all hover:bg-[#0036E0]">
+                <i class="fas fa-cog text-white w-6 h-6 stroke-2-5"></i>
+                <span class="nav-item-text text-[#1950FF] absolute right-[105%] opacity-0 invisible cursor-default pointer-events-none text-lg font-medium whitespace-nowrap transition-all hover:right-[120%] hover:opacity-100 hover:visible">Settings</span>
+            </a>
+        </nav>
+    </div>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -246,5 +289,6 @@
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/login.js"></script>
     <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/menu.js"></script>
 </body>
 </html>
