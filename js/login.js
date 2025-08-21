@@ -2,8 +2,6 @@ import { auth, db } from './firebase.js';
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
-    signInWithPopup,
-    GoogleAuthProvider,
     onAuthStateChanged,
     signOut
 } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -19,7 +17,6 @@ const signupForm = document.getElementById('signup-form');
 const signupUsernameInput = document.getElementById('signup-username');
 const signupEmailInput = document.getElementById('signup-email');
 const signupPasswordInput = document.getElementById('signup-password');
-const googleLoginBtn = document.getElementById('google-login-btn');
 const logoutBtn = document.getElementById('logout-btn');
 
 async function createNewUserInDb(userId, username) {
@@ -82,18 +79,6 @@ signupForm.addEventListener('submit', async (e) => {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
         await createNewUserInDb(user.uid, username);
-        // On success, the onAuthStateChanged listener handles the UI.
-    } catch (error) {
-        alert(error.message);
-    }
-});
-
-googleLoginBtn.addEventListener('click', async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-        const result = await signInWithPopup(auth, provider);
-        const user = result.user;
-        await createNewUserInDb(user.uid, user.displayName);
         // On success, the onAuthStateChanged listener handles the UI.
     } catch (error) {
         alert(error.message);
