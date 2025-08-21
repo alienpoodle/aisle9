@@ -1,7 +1,9 @@
-/* This stylesheet has been refactored to remove conflicting and redundant styles.
+/*
+ * This stylesheet has been refactored to remove conflicting and redundant styles.
  * It now primarily focuses on the custom card design and specific element overrides.
  * All other layout and responsive behaviors are handled by Tailwind CSS.
  */
+
 * {
     box-sizing: border-box;
 }
@@ -32,7 +34,7 @@ body {
 }
 
 /* Corrected item card styling with flexbox and consistent spacing */
-.item-card-container {
+.item-card {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -42,15 +44,10 @@ body {
     padding: 25px;
     border-radius: 25px;
     transition: all 0.3s;
-    height: auto;
-    min-width: 0;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
-.item-card-container:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */
+    height: auto; /* Allow height to adjust to content */
+    min-width: 0; /* Ensures the flex item can shrink */
+    word-wrap: break-word; /* Prevents overflow of long words */
+    overflow-wrap: break-word; /* Prevents overflow of long words */
 }
 
 /* Media query for wider screens to use a grid layout */
@@ -66,6 +63,9 @@ body {
 @media (min-width: 1024px) {
     #item-cards-container {
         grid-template-columns: repeat(3, minmax(450px, 1fr));
+    }
+    .item-card {
+        min-width: 450px;
     }
 }
 
@@ -111,39 +111,8 @@ body {
     cursor: pointer;
     color: #3b82f6;
     transition: color 0.15s ease-in-out;
-    margin-right: 1.5rem; /* Add spacing to match vote buttons */
 }
 
 .share-btn:hover {
     color: #1d4ed8;
-}
-
-/* Custom scrollbar for dropdowns */
-.max-h-60::-webkit-scrollbar {
-    width: 8px;
-}
-
-.max-h-60::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-.max-h-60::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
-}
-
-.max-h-60::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
-
-/* Styles for the action menu on click */
-.action-menu-container .menu-items {
-    display: none;
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
-}
-.action-menu-container.active .menu-items {
-    display: flex; /* or block */
-    opacity: 1;
 }

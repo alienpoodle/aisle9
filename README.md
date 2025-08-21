@@ -1,4 +1,4 @@
-# Aisle 9 - Price Listing and Comparison App
+# Aisle 9 - Price Listing App
 
 Aisle 9 is a modern web app for sharing and comparing grocery prices across supermarkets in St. Vincent & the Grenadines. Users can anonymously submit price listings, upvote/downvote listings, and compare prices by item, store, and type (Local/Imported). The app is designed to be mobile-friendly and installable as a Progressive Web App (PWA).
 
