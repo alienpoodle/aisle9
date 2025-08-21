@@ -9,6 +9,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+const loadingPage = document.getElementById('loading-page');
 const authPage = document.getElementById('auth-page');
 const appContainer = document.getElementById('app-container');
 const loginForm = document.getElementById('login-form');
@@ -43,6 +44,7 @@ function showAuth() {
 }
 
 onAuthStateChanged(auth, (user) => {
+    loadingPage.classList.add('hidden');
     if (user) {
         showApp();
         window.dispatchEvent(new CustomEvent('user-authenticated', {
