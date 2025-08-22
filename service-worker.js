@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aisle9-cache-v2';
+const CACHE_NAME = 'aisle9-cache-v2.1';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -19,10 +19,9 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    // Check if the request is for the Firestore API.
-    // If it is, bypass the Service Worker and go directly to the network.
+    // Intercept and bypass all Firestore API requests
     if (event.request.url.includes('firestore.googleapis.com')) {
-        return;
+        return fetch(event.request);
     }
 
     event.respondWith(
