@@ -1,5 +1,13 @@
-import { db, auth, appId } from './firebase.js';
-import { collection, addDoc, onSnapshot, query, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+import { firebaseConfig } from './firebase-config.js';
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const appId = "aisle-9-6f7d1";
 
 // Hardcoded list of supermarkets
 const supermarkets = [
@@ -270,258 +278,219 @@ function setupSearchableDropdown(inputElement, dropdownElement, hiddenInputEleme
             dropdownElement.classList.add('hidden');
         }
     });
-
-    // Initial render on focus
-    inputElement.addEventListener('focus', () => renderOptions(inputElement.value));
 }
 
-// Function to render items as individual cards using the new CSS
-function renderItems(itemsToRender) {
+function renderItemCards(items) {
     itemCardsContainer.innerHTML = '';
-    if (itemsToRender.length === 0) {
+    if (items.length === 0) {
         noItemsMessage.classList.remove('hidden');
-        loadingIndicator.classList.add('hidden');
         return;
     }
     noItemsMessage.classList.add('hidden');
-    loadingIndicator.classList.add('hidden');
 
-    itemsToRender.forEach(item => {
-        const isConfirmed = item.upvotes.length > item.downvotes.length;
-        const confirmationText = isConfirmed ? 'Confirmed True' : 'Confirmed False';
-        const confirmationColor = isConfirmed ? 'text-green-500' : 'text-red-500';
+    items.forEach(item => {
+        const itemCard = document.createElement('div');
+        itemCard.className = 'item-card relative p-6 bg-white rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-105';
+        itemCard.dataset.id = item.id;
 
-        const card = document.createElement('div');
-        // Corrected: Using more robust and responsive Tailwind classes for the card
-        card.className = 'w-full md:w-1/2 lg:w-1/3 p-4 flex';
-        card.innerHTML = `
-            <div class="item-card flex-1">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold min-w-0">
-                        <span class="clickable-item-name" data-item-id="${item.id}">${item.name}</span>
-                    </h3>
-                    <button data-id="${item.id}" data-action="share" class="share-btn text-blue-500 hover:text-blue-700 transition duration-150">
-                        <i class="fas fa-share-alt text-2xl"></i>
-                    </button>
-                </div>
-                <span class="text-3xl font-bold text-blue-600">XCD$${item.price.toFixed(2)}</span>
-                <div class="flex items-center text-sm font-medium mt-2">
-                    <i class="fas fa-check-circle mr-2 ${confirmationColor}"></i>
-                    <span class="${confirmationColor}">${confirmationText} (${Math.abs(item.upvotes.length - item.downvotes.length)} votes)</span>
-                </div>
-                <div class="flex flex-col mt-4 text-sm text-gray-500">
-                    <div class="flex items-center space-x-4 mb-2">
-                        <div class="flex items-center">
-                            <i class="fas fa-store mr-2"></i>
-                            <span>${item.store}</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-4 mb-2">
-                        <div class="flex items-center">
-                            <i class="fas fa-tag mr-2"></i>
-                            <span>${item.type || 'N/A'}</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <div class="flex items-center">
-                            <i class="fas fa-user mr-2"></i>
-                            <span>${item.submittedBy}</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-calendar-alt mr-2"></i>
-                            <span>${new Date(item.submissionDate).toLocaleDateString()}</span>
-                        </div>
+        itemCard.innerHTML = `
+            <div class="absolute top-4 right-4 z-10 group">
+                <ul class="flex space-x-2 text-white">
+                    <li class="relative">
+                        <a href="#" class="block w-8 h-8 flex items-center justify-center bg-gray-600 rounded-full hover:bg-gray-700 transition duration-300">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <span class="absolute top-1/2 -translate-y-1/2 right-10 z-10 scale-0 group-hover:scale-100 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out bg-gray-800 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">Edit</span>
+                    </li>
+                    <li class="relative">
+                        <a href="#" class="block w-8 h-8 flex items-center justify-center bg-gray-600 rounded-full hover:bg-gray-700 transition duration-300">
+                            <i class="fas fa-clone"></i>
+                        </a>
+                        <span class="absolute top-1/2 -translate-y-1/2 right-10 z-10 scale-0 group-hover:scale-100 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out bg-gray-800 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">Duplicate</span>
+                    </li>
+                    <li class="relative">
+                        <a href="#" class="block w-8 h-8 flex items-center justify-center bg-gray-600 rounded-full hover:bg-gray-700 transition duration-300">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                        <span class="absolute top-1/2 -translate-y-1/2 right-10 z-10 scale-0 group-hover:scale-100 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out bg-gray-800 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">Delete</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="flex items-start">
+                <div class="flex-grow">
+                    <h3 class="text-xl font-bold text-gray-900 clickable-item-name">${item.name}</h3>
+                    <p class="text-sm text-gray-600 truncate mt-1">${item.description}</p>
+                    <div class="mt-3 flex flex-wrap gap-2 text-xs font-medium">
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">${item.category}</span>
+                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full">${item.store}</span>
+                        <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">${item.type}</span>
                     </div>
                 </div>
-                <div class="vote-buttons-container mt-4">
-                    <button data-id="${item.id}" data-action="upvote" class="vote-btn text-green-500 hover:text-green-700 transition duration-150">
-                        <i class="fas fa-thumbs-up text-3xl"></i>
-                        <span class="vote-count bg-green-500">${item.upvotes.length}</span>
+                <div class="flex-shrink-0 ml-4 flex flex-col items-center">
+                    <div class="text-3xl font-bold text-blue-600">${item.price.toFixed(2)}<span class="text-base font-normal"> XCD$</span></div>
+                    <div class="text-xs text-gray-500 mt-1">Submitted by: ${item.submittedBy}</div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mt-6">
+                <div class="flex space-x-4 text-sm">
+                    <button class="vote-btn flex items-center text-green-600 hover:text-green-800 transition-colors duration-200" data-id="${item.id}" data-type="upvote">
+                        <i class="fas fa-thumbs-up mr-1"></i>
+                        <span class="font-semibold">${item.upvotes.length}</span>
                     </button>
-                    <button data-id="${item.id}" data-action="downvote" class="vote-btn downvote text-red-500 hover:text-red-700 transition duration-150">
-                        <i class="fas fa-thumbs-down text-3xl"></i>
-                        <span class="vote-count">${item.downvotes.length}</span>
+                    <button class="vote-btn flex items-center text-red-600 hover:text-red-800 transition-colors duration-200" data-id="${item.id}" data-type="downvote">
+                        <i class="fas fa-thumbs-down mr-1"></i>
+                        <span class="font-semibold">${item.downvotes.length}</span>
                     </button>
+                </div>
+                <div class="text-xs text-gray-400">
+                    <span class="mr-1">Updated:</span>
+                    <span>${new Date(item.submissionDate).toLocaleDateString()}</span>
                 </div>
             </div>
         `;
-        itemCardsContainer.appendChild(card);
+        itemCardsContainer.appendChild(itemCard);
     });
 }
 
-// Function to group items by name for comparison
-function groupItemsForComparison(items) {
-    const grouped = {};
-    items.forEach(item => {
-        const key = item.name.toLowerCase();
-        if (!grouped[key]) {
-            grouped[key] = {
-                name: item.name,
-                variants: []
-            };
-        }
-        grouped[key].variants.push({
-            id: item.id,
-            store: item.store,
-            price: item.price,
-            category: item.category,
-            type: item.type,
-            submissionDate: item.submissionDate,
-            upvotes: item.upvotes,
-            downvotes: item.downvotes,
-            description: item.description,
-            submittedBy: item.submittedBy
-        });
-    });
-
-    // Sort variants within each group by price (lowest first)
-    for (const key in grouped) {
-        grouped[key].variants.sort((a, b) => a.price - b.price);
-    }
-
-    // Convert to array for easier rendering and sort by item name
-    return Object.values(grouped).sort((a, b) => a.name.localeCompare(b.name));
-}
-
-// Function to render items in comparison view
-function renderComparisonItems(itemsToRender) {
+function renderComparisonCards(items) {
     comparisonCardsContainer.innerHTML = '';
-    loadingComparisonIndicator.classList.remove('hidden');
-    noComparisonItemsMessage.classList.add('hidden');
-
-    const groupedItems = groupItemsForComparison(itemsToRender);
-
-    if (groupedItems.length === 0) {
+    if (items.length === 0) {
         noComparisonItemsMessage.classList.remove('hidden');
-        loadingComparisonIndicator.classList.add('hidden');
         return;
     }
-    loadingComparisonIndicator.classList.add('hidden');
+    noComparisonItemsMessage.classList.add('hidden');
 
-    groupedItems.forEach(group => {
+    const groupedItems = items.reduce((acc, item) => {
+        const key = item.name.toLowerCase().trim();
+        if (!acc[key]) {
+            acc[key] = [];
+        }
+        acc[key].push(item);
+        return acc;
+    }, {});
+
+    for (const itemName in groupedItems) {
+        const itemGroup = groupedItems[itemName];
         const comparisonCard = document.createElement('div');
-        comparisonCard.className = 'bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300';
-        
-        let variantsHtml = group.variants.map(variant => {
-            const isConfirmed = variant.upvotes.length > variant.downvotes.length;
-            const confirmationText = isConfirmed ? 'Confirmed True' : 'Confirmed False';
-            const confirmationColor = isConfirmed ? 'text-green-500' : 'text-red-500';
-
-            return `
-            <div class="flex justify-between items-center mb-2">
-                <div class="flex-grow flex flex-col">
-                    <span class="text-sm font-medium text-gray-700">${variant.store} <span class="text-xs text-gray-500">(${variant.type || 'N/A'})</span></span>
-                    <div class="flex items-center text-xs text-gray-500 mt-1">
-                        <span>Submitted by: ${variant.submittedBy} on ${new Date(variant.submissionDate).toLocaleDateString()}</span>
-                        <div class="ml-2 flex items-center">
-                            <i class="fas fa-check-circle mr-1 ${confirmationColor}"></i>
-                            <span class="${confirmationColor} font-medium">${confirmationText} (${Math.abs(variant.upvotes.length - variant.downvotes.length)} votes)</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <span class="font-semibold text-2xl text-blue-600">XCD$${variant.price.toFixed(2)}</span>
-                </div>
-            </div>
-        `;
-        }).join('');
-
+        comparisonCard.className = 'comparison-card p-6 bg-white rounded-xl shadow-lg flex flex-col justify-between';
         comparisonCard.innerHTML = `
-            <div class="flex justify-between items-center mb-4 border-b pb-2">
-                <h3 class="text-3xl font-bold text-gray-900">
-                    <span class="clickable-item-name" data-item-id="${group.variants[0].id}">${group.name}</span>
-                </h3>
-                <button data-id="${group.variants[0].id}" data-action="share" class="share-btn text-blue-500 hover:text-blue-700 transition duration-150">
-                    <i class="fas fa-share-alt text-2xl"></i>
-                </button>
-            </div>
-            <div class="space-y-4">
-                ${variantsHtml}
+            <h3 class="text-2xl font-bold text-gray-900">${itemGroup[0].name}</h3>
+            <p class="text-sm text-gray-600 mt-2">Description: ${itemGroup[0].description}</p>
+            <div class="mt-4 space-y-3">
+                ${itemGroup.sort((a, b) => a.price - b.price).map(item => `
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <div class="flex-grow">
+                            <span class="text-lg font-semibold text-gray-800">${item.store}</span>
+                            <span class="text-sm text-gray-500 ml-2">(${item.type})</span>
+                        </div>
+                        <span class="text-lg font-bold text-blue-600">${item.price.toFixed(2)} XCD$</span>
+                    </div>
+                `).join('')}
             </div>
         `;
         comparisonCardsContainer.appendChild(comparisonCard);
-    });
+    }
 }
 
-// Function to show item details modal
+// Function to update votes
+async function updateVote(docId, voteType) {
+    if (!userId) {
+        showMessageBox("You must be logged in to vote.");
+        return;
+    }
+
+    const itemRef = doc(db, `artifacts/${appId}/public/data/items`, docId);
+
+    try {
+        await fetchWithBackoff(async () => {
+            const itemDoc = await getDoc(itemRef);
+            if (itemDoc.exists()) {
+                const data = itemDoc.data();
+                const upvotes = new Set(data.upvotes || []);
+                const downvotes = new Set(data.downvotes || []);
+                let hasVoted = false;
+
+                if (voteType === 'upvote') {
+                    if (downvotes.has(userId)) {
+                        downvotes.delete(userId);
+                    }
+                    if (upvotes.has(userId)) {
+                        upvotes.delete(userId);
+                        hasVoted = false;
+                    } else {
+                        upvotes.add(userId);
+                        hasVoted = true;
+                    }
+                } else if (voteType === 'downvote') {
+                    if (upvotes.has(userId)) {
+                        upvotes.delete(userId);
+                    }
+                    if (downvotes.has(userId)) {
+                        downvotes.delete(userId);
+                        hasVoted = false;
+                    } else {
+                        downvotes.add(userId);
+                        hasVoted = true;
+                    }
+                }
+
+                await updateDoc(itemRef, {
+                    upvotes: Array.from(upvotes),
+                    downvotes: Array.from(downvotes)
+                });
+                console.log(`Vote registered: ${hasVoted ? 'Added' : 'Removed'} ${voteType}`);
+            }
+        });
+    } catch (error) {
+        console.error("Error updating vote: ", error);
+        showMessageBox("Failed to update vote. Please try again.");
+    }
+}
+
+// Function to handle showing item details modal
 function showItemDetails(item) {
     detailItemName.textContent = item.name;
-    detailItemDescription.textContent = item.description || 'N/A';
+    detailItemDescription.textContent = item.description;
     detailItemCategory.textContent = item.category;
     detailItemStore.textContent = item.store;
-    detailItemType.textContent = item.type || 'N/A';
-    detailItemPrice.textContent = `XCD$${item.price.toFixed(2)}`;
-    detailItemDate.textContent = new Date(item.submissionDate).toLocaleDateString();
+    detailItemType.textContent = item.type;
+    detailItemPrice.textContent = `${item.price.toFixed(2)} XCD$`;
     detailUpvotes.textContent = item.upvotes.length;
     detailDownvotes.textContent = item.downvotes.length;
-    if (detailItemSubmittedBy) {
-        detailItemSubmittedBy.textContent = item.submittedBy;
-    }
+    detailItemDate.textContent = new Date(item.submissionDate).toLocaleDateString();
     itemDetailsModal.classList.remove('hidden');
 }
 
-// Helper to get selected values from multiselect checkboxes
-function getSelectedValues(containerId) {
-    return Array.from(document.querySelectorAll(`#${containerId} input[type="checkbox"]:checked`)).map(checkbox => checkbox.value);
-}
-
-// Populate filter dropdowns and the store/category datalists
-function populateUIFromData() {
-    // We no longer populate the add item form's select menus here,
-    // as they are now handled by the new searchable dropdowns.
-
-    // Populate multi-select filter options with checkboxes
-    populateFilterCheckboxes(storeFilterOptions, supermarkets);
-    populateFilterCheckboxes(categoryFilterOptions, categories);
-    populateFilterCheckboxes(typeFilterOptions, itemTypes);
-}
-
-// Helper function to create checkboxes for a filter
-function populateFilterCheckboxes(container, options) {
-    container.innerHTML = '';
-    // Add a "Select All" option
-    const selectAllDiv = document.createElement('div');
-    selectAllDiv.className = 'flex items-center px-4 py-2 hover:bg-gray-100';
-    selectAllDiv.innerHTML = `
-        <input type="checkbox" id="select-all-${container.id}" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-        <label for="select-all-${container.id}" class="ml-2 block font-medium text-gray-900">Select All</label>
-    `;
-    container.appendChild(selectAllDiv);
-    document.getElementById(`select-all-${container.id}`).addEventListener('change', (e) => {
-        const isChecked = e.target.checked;
-        container.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-            checkbox.checked = isChecked;
-        });
+// Real-time Firestore Listener
+function setupRealtimeItemListener() {
+    if (unsubscribeSnapshot) {
+        unsubscribeSnapshot();
+    }
+    const q = query(collection(db, `artifacts/${appId}/public/data/items`));
+    unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
+        allItems = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
         applyFiltersAndSearch();
-    });
-
-    options.forEach(option => {
-        const div = document.createElement('div');
-        div.className = 'flex items-center px-4 py-2 hover:bg-gray-100';
-        div.innerHTML = `
-            <input type="checkbox" id="${container.id}-${option.replace(/\s/g, '-')}" name="filter-option" value="${option}" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-            <label for="${container.id}-${option.replace(/\s/g, '-')}" class="ml-2 block text-gray-900">${option}</label>
-        `;
-        container.appendChild(div);
-    });
-
-    container.querySelectorAll('input[name="filter-option"]').forEach(checkbox => {
-        checkbox.addEventListener('change', applyFiltersAndSearch);
+    }, (error) => {
+        console.error("Error fetching documents: ", error);
+        showMessageBox("Failed to load listings. Please try again later.");
     });
 }
 
-// Apply filters and search
+// Function to apply filters and search
 function applyFiltersAndSearch() {
     const searchTerm = searchInput.value.toLowerCase();
-    const selectedStores = getSelectedValues('store-filter-options');
-    const selectedCategories = getSelectedValues('category-filter-options');
-    const selectedTypes = getSelectedValues('type-filter-options');
+    const selectedStores = Array.from(storeFilterOptions.querySelectorAll('input:checked')).map(input => input.value);
+    const selectedCategories = Array.from(categoryFilterOptions.querySelectorAll('input:checked')).map(input => input.value);
+    const selectedTypes = Array.from(typeFilterOptions.querySelectorAll('input:checked')).map(input => input.value);
 
     const filteredItems = allItems.filter(item => {
         const matchesSearch = item.name.toLowerCase().includes(searchTerm) ||
-                             (item.description && item.description.toLowerCase().includes(searchTerm)) ||
-                             item.category.toLowerCase().includes(searchTerm) ||
-                             item.store.toLowerCase().includes(searchTerm);
+            item.description.toLowerCase().includes(searchTerm) ||
+            item.store.toLowerCase().includes(searchTerm) ||
+            item.category.toLowerCase().includes(searchTerm);
 
         const matchesStore = selectedStores.length === 0 || selectedStores.includes(item.store);
         const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(item.category);
@@ -531,146 +500,52 @@ function applyFiltersAndSearch() {
     });
 
     if (currentView === 'cards') {
-        renderItems(filteredItems);
-    } else if (currentView === 'comparison') {
-        renderComparisonItems(filteredItems);
+        renderItemCards(filteredItems);
+    } else {
+        renderComparisonCards(filteredItems);
     }
 }
 
-// Real-time listener for items
-function setupRealtimeItemListener() {
-    if (unsubscribeSnapshot) {
-        unsubscribeSnapshot();
-    }
+// Populate and setup filter dropdowns
+function setupFilterDropdown(options, container, filterBtn, filterType) {
+    const optionsContainer = container;
+    options.forEach(option => {
+        const checkboxDiv = document.createElement('div');
+        checkboxDiv.className = 'flex items-center p-2 hover:bg-gray-100 cursor-pointer';
+        const checkboxId = `${filterType}-${option.replace(/\s/g, '-')}`;
+        checkboxDiv.innerHTML = `
+            <input type="checkbox" id="${checkboxId}" name="${filterType}" value="${option}" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+            <label for="${checkboxId}" class="ml-2 block text-sm font-medium text-gray-700">${option}</label>
+        `;
+        optionsContainer.appendChild(checkboxDiv);
+    });
 
-    if (!db || !userId) {
-        console.warn("Firestore or User ID not ready for item listener.");
-        return;
-    }
-
-    loadingIndicator.classList.remove('hidden');
-    loadingComparisonIndicator.classList.remove('hidden');
-    itemCardsContainer.innerHTML = '';
-    comparisonCardsContainer.innerHTML = '';
-
-    const itemsCollectionRef = collection(db, `artifacts/${appId}/public/data/items`);
-    const q = query(itemsCollectionRef);
-
-    unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
-        allItems = [];
-        snapshot.forEach(doc => {
-            const data = doc.data();
-            allItems.push({ id: doc.id, ...data });
-        });
-
-        allItems.sort((a, b) => new Date(b.submissionDate) - new Date(a.submissionDate));
-
-        populateUIFromData();
+    optionsContainer.addEventListener('change', () => {
         applyFiltersAndSearch();
-    }, (error) => {
-        console.error("Error fetching documents: ", error);
-        showMessageBox("Failed to load items. Please refresh.");
-        loadingIndicator.classList.add('hidden');
-        noItemsMessage.classList.remove('hidden');
-        loadingComparisonIndicator.classList.add('hidden');
-        noComparisonItemsMessage.classList.remove('hidden');
+    });
+
+    // Handle dropdown toggle
+    filterBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.querySelectorAll('.filter-options-container').forEach(otherContainer => {
+            if (otherContainer !== optionsContainer) {
+                otherContainer.classList.add('hidden');
+            }
+        });
+        optionsContainer.classList.toggle('hidden');
     });
 }
 
-// Handle upvote/downvote/share and item details click
-document.addEventListener('click', async (e) => {
-    const button = e.target.closest('button');
-    const itemNameSpan = e.target.closest('.clickable-item-name');
+setupFilterDropdown(supermarkets, storeFilterOptions, storeFilterBtn, 'store');
+setupFilterDropdown(categories, categoryFilterOptions, categoryFilterBtn, 'category');
+setupFilterDropdown(itemTypes, typeFilterOptions, typeFilterBtn, 'type');
 
-    if (button) {
-        const itemId = button.dataset.id;
-        const action = button.dataset.action;
-        const currentItem = allItems.find(item => item.id === itemId);
+const filterContainers = document.querySelectorAll('#store-filter-container, #category-filter-container, #type-filter-container');
 
-        if (!currentItem) return;
-
-        if (action === 'share') {
-            const shareText = `Check out this price listing for ${currentItem.name} at ${currentItem.store} for XCD$${currentItem.price.toFixed(2)}!`;
-
-            if (navigator.share) {
-                try {
-                    await navigator.share({
-                        title: `Aisle 9: ${currentItem.name} Price`,
-                        text: shareText,
-                    });
-                } catch (error) {
-                    console.error('Error sharing:', error);
-                }
-            } else {
-                const textarea = document.createElement('textarea');
-                textarea.value = shareText;
-                document.body.appendChild(textarea);
-                textarea.select();
-                try {
-                    document.execCommand('copy');
-                    showMessageBox('Item details copied to clipboard!');
-                } catch (err) {
-                    console.error('Fallback: Oops, unable to copy', err);
-                    showMessageBox('Unable to copy to clipboard.');
-                }
-                document.body.removeChild(textarea);
-            }
-        } else if (action === 'upvote' || action === 'downvote') {
-            if (!userId) {
-                showMessageBox("Please log in to vote.");
-                return;
-            }
-
-            try {
-                const itemRef = doc(db, `artifacts/${appId}/public/data/items`, itemId);
-                
-                let upvotes = [...currentItem.upvotes];
-                let downvotes = [...currentItem.downvotes];
-
-                const hasUpvoted = upvotes.includes(userId);
-                const hasDownvoted = downvotes.includes(userId);
-
-                if (action === 'upvote') {
-                    if (hasUpvoted) {
-                        upvotes = upvotes.filter(id => id !== userId);
-                    } else {
-                        upvotes.push(userId);
-                        if (hasDownvoted) {
-                            downvotes = downvotes.filter(id => id !== userId);
-                        }
-                    }
-                } else if (action === 'downvote') {
-                    if (hasDownvoted) {
-                        downvotes = downvotes.filter(id => id !== userId);
-                    } else {
-                        downvotes.push(userId);
-                        if (hasUpvoted) {
-                            upvotes = upvotes.filter(id => id !== userId);
-                        }
-                    }
-                }
-
-                await fetchWithBackoff(() => updateDoc(itemRef, { upvotes, downvotes }));
-
-            } catch (error) {
-                console.error("Error updating vote:", error);
-                showMessageBox("Failed to record vote. Please try again.");
-            }
-        }
-    } else if (itemNameSpan) {
-        const itemId = itemNameSpan.dataset.itemId;
-        const item = allItems.find(i => i.id === itemId);
-        if (item) {
-            showItemDetails(item);
-        }
-    }
-});
-
-// Multi-select filter dropdown logic
-const filterContainers = document.querySelectorAll('.relative.inline-block');
 filterContainers.forEach(container => {
-    const button = container.querySelector('button');
     const options = container.querySelector('[role="menu"]');
+    const button = container.querySelector('button');
+
     button.addEventListener('click', (event) => {
         event.stopPropagation();
         filterContainers.forEach(otherContainer => {
@@ -700,7 +575,7 @@ window.addEventListener('user-authenticated', (e) => {
     username = e.detail.username;
     userDisplay.textContent = `Welcome, ${username}`;
     userDisplay.classList.remove('hidden');
-    
+
     // Once authenticated, setup the item listener and app functionality
     setupRealtimeItemListener();
     showView('cards');
@@ -717,4 +592,24 @@ window.addEventListener('user-signed-out', () => {
     userDisplay.classList.add('hidden');
     itemCardsContainer.innerHTML = '';
     comparisonCardsContainer.innerHTML = '';
+});
+
+// Event listener for votes
+itemCardsContainer.addEventListener('click', (e) => {
+    const voteBtn = e.target.closest('.vote-btn');
+    if (voteBtn) {
+        const docId = voteBtn.dataset.id;
+        const voteType = voteBtn.dataset.type;
+        updateVote(docId, voteType);
+    }
+
+    const itemNameElement = e.target.closest('.clickable-item-name');
+    if (itemNameElement) {
+        const itemCard = itemNameElement.closest('.item-card');
+        const itemId = itemCard.dataset.id;
+        const item = allItems.find(i => i.id === itemId);
+        if (item) {
+            showItemDetails(item);
+        }
+    }
 });
