@@ -15,7 +15,14 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <section id="auth-page" class="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+    <div id="loading-page" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-200 bg-opacity-75">
+        <div class="text-center">
+            <i class="fas fa-spinner fa-spin text-blue-500 text-6xl"></i>
+            <p class="mt-4 text-xl text-gray-700">Loading...</p>
+        </div>
+    </div>
+
+    <section id="auth-page" class="flex items-center justify-center min-h-screen bg-gray-100 p-4 hidden">
         <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto transform transition-all duration-500">
             <h2 id="auth-title" class="text-4xl font-bold text-center text-gray-900 mb-6">Welcome!</h2>
             <div id="auth-toggle" class="flex justify-center mb-6">
