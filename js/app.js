@@ -294,28 +294,32 @@ function renderItemCards(items) {
         itemCard.dataset.id = item.id;
 
         itemCard.innerHTML = `
-            <div class="absolute top-4 right-4 z-10 group">
-                <ul class="flex space-x-2 text-white">
-                    <li class="relative">
-                        <a href="#" class="block w-8 h-8 flex items-center justify-center bg-gray-600 rounded-full hover:bg-gray-700 transition duration-300">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <span class="absolute top-1/2 -translate-y-1/2 right-10 z-10 scale-0 group-hover:scale-100 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out bg-gray-800 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">Edit</span>
-                    </li>
-                    <li class="relative">
-                        <a href="#" class="block w-8 h-8 flex items-center justify-center bg-gray-600 rounded-full hover:bg-gray-700 transition duration-300">
-                            <i class="fas fa-clone"></i>
-                        </a>
-                        <span class="absolute top-1/2 -translate-y-1/2 right-10 z-10 scale-0 group-hover:scale-100 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out bg-gray-800 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">Duplicate</span>
-                    </li>
-                    <li class="relative">
-                        <a href="#" class="block w-8 h-8 flex items-center justify-center bg-gray-600 rounded-full hover:bg-gray-700 transition duration-300">
-                            <i class="fas fa-trash"></i>
-                        </a>
-                        <span class="absolute top-1/2 -translate-y-1/2 right-10 z-10 scale-0 group-hover:scale-100 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out bg-gray-800 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">Delete</span>
-                    </li>
-                </ul>
-            </div>
+                    <div class="group relative inline-block h-9 w-9 overflow-hidden rounded-full bg-gray-900/80 transition-[width] duration-200 hover:w-[160px] hover:bg-gray-900">
+                        <ul class="absolute inset-0 flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0">
+                            <li class="p-2 transition-opacity duration-200">
+                            <a href="#" data-id="${item.id}" data-action="share" class="share-btn text-white/80 hover:text-blue-700 transition duration-150" aria-label="share">
+                                <i class="fas fa-share-alt text-2xl"></i>
+                            </a>
+
+                            </li>
+
+                            <li class="opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                            <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            </li>
+                            <li class="opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                            <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Duplicate">
+                                <i class="fas fa-clone"></i>
+                            </a>
+                            </li>
+                            <li class="opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                            <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Delete">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                            </li>
+                        </ul>
+                    </div>
             <div class="flex items-start">
                 <div class="flex-grow">
                     <h3 class="text-xl font-bold text-gray-900 clickable-item-name">${item.name}</h3>
