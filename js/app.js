@@ -294,6 +294,35 @@ function renderItemCards(items) {
         itemCard.dataset.id = item.id;
 
         itemCard.innerHTML = `
+
+            <div class="flex items-start">
+                <div class="flex-grow">
+                    <h3 class="text-xl font-bold text-gray-900 clickable-item-name">${item.name}</h3>
+                    <p class="text-sm text-gray-600 truncate mt-1">${item.description}</p>
+                    <div class="mt-3 flex flex-wrap gap-2 text-xs font-medium">
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">${item.category}</span>
+                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full">${item.store}</span>
+                    </div>
+                </div>
+                <div class="flex-shrink-0 ml-4 flex flex-col items-center">
+                    <div class="text-3xl font-bold text-blue-600">${item.price.toFixed(2)}<span class="text-base font-normal"> XCD$</span></div>
+                    <div class="text-xs text-gray-500 mt-1">Submitted by: ${item.submittedBy}</div>
+                    <div class="text-xs text-gray-400">
+                        <span class="mr-1">Updated:</span><span>${new Date(item.submissionDate).toLocaleDateString()}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mt-6">
+                <div class="flex space-x-4 text-sm">
+                    <button class="vote-btn flex items-center text-green-600 hover:text-green-800 transition-colors duration-200" data-id="${item.id}" data-type="upvote">
+                        <i class="fas fa-thumbs-up mr-1"></i>
+                        <span class="font-semibold">${item.upvotes.length}</span>
+                    </button>
+                    <button class="vote-btn flex items-center text-red-600 hover:text-red-800 transition-colors duration-200" data-id="${item.id}" data-type="downvote">
+                        <i class="fas fa-thumbs-down mr-1"></i>
+                        <span class="font-semibold">${item.downvotes.length}</span>
+                    </button>
+                </div>
                     <div class="group relative inline-block h-9 w-9 overflow-hidden rounded-full bg-blue-500 transition-[width] duration-200 hover:w-[160px] hover:bg-gradient-to-r from-blue-500 to-indigo-600">
                         <p class="text-white"><i class="fas fa-ellipsis-h"></i></p>
                         <ul class="absolute inset-0 flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0">
@@ -320,37 +349,7 @@ function renderItemCards(items) {
                             </a>
                             </li>
                         </ul>
-                    </div>
-            <div class="flex items-start">
-                <div class="flex-grow">
-                    <h3 class="text-xl font-bold text-gray-900 clickable-item-name">${item.name}</h3>
-                    <p class="text-sm text-gray-600 truncate mt-1">${item.description}</p>
-                    <div class="mt-3 flex flex-wrap gap-2 text-xs font-medium">
-                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">${item.category}</span>
-                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full">${item.store}</span>
-                        <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">${item.type}</span>
-                    </div>
-                </div>
-                <div class="flex-shrink-0 ml-4 flex flex-col items-center">
-                    <div class="text-3xl font-bold text-blue-600">${item.price.toFixed(2)}<span class="text-base font-normal"> XCD$</span></div>
-                    <div class="text-xs text-gray-500 mt-1">Submitted by: ${item.submittedBy}</div>
-                </div>
-            </div>
-            <div class="flex justify-between items-center mt-6">
-                <div class="flex space-x-4 text-sm">
-                    <button class="vote-btn flex items-center text-green-600 hover:text-green-800 transition-colors duration-200" data-id="${item.id}" data-type="upvote">
-                        <i class="fas fa-thumbs-up mr-1"></i>
-                        <span class="font-semibold">${item.upvotes.length}</span>
-                    </button>
-                    <button class="vote-btn flex items-center text-red-600 hover:text-red-800 transition-colors duration-200" data-id="${item.id}" data-type="downvote">
-                        <i class="fas fa-thumbs-down mr-1"></i>
-                        <span class="font-semibold">${item.downvotes.length}</span>
-                    </button>
-                </div>
-                <div class="text-xs text-gray-400">
-                    <span class="mr-1">Updated:</span>
-                    <span>${new Date(item.submissionDate).toLocaleDateString()}</span>
-                </div>
+                    </div>                
             </div>
         `;
         itemCardsContainer.appendChild(itemCard);
