@@ -327,29 +327,28 @@ function renderItemCards(items) {
                         <p class="text-white"><i class="fas fa-ellipsis-h"></i></p>
                         <ul class="absolute inset-0 flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0">
                             <li class="p-2 transition-opacity duration-200">
-                            <a href="#" data-id="${item.id}" data-action="share" class="share-btn text-white/80 hover:text-blue-700 transition duration-150" aria-label="share">
-                                <i class="fas fa-share-alt text-2xl"></i>
-                            </a>
-
+                                <a href="#" data-id="${item.id}" data-action="share" class="share-btn text-white/80 hover:text-blue-700 transition duration-150" aria-label="share">
+                                    <i class="fas fa-share-alt text-2xl"></i>
+                                </a>
                             </li>
 
                             <li class="opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                            <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Edit">
-                                <i class="fas fa-edit"></i>
-                            </a>
+                                <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
                             </li>
                             <li class="opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                            <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Duplicate">
-                                <i class="fas fa-clone"></i>
-                            </a>
+                                <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Duplicate">
+                                    <i class="fas fa-clone"></i>
+                                </a>
                             </li>
                             <li class="opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                            <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Delete">
-                                <i class="fas fa-trash"></i>
-                            </a>
+                                <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </a>
                             </li>
                         </ul>
-                    </div>                
+                    </div>              
             </div>
         `;
         itemCardsContainer.appendChild(itemCard);
