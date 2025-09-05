@@ -294,7 +294,8 @@ function renderItemCards(items) {
         itemCard.dataset.id = item.id;
 
         itemCard.innerHTML = `
-                    <div class="group relative inline-block h-9 w-9 overflow-hidden rounded-full bg-gray-900/80 transition-[width] duration-200 hover:w-[160px] hover:bg-gray-900">
+                    <div class="group relative inline-block h-9 w-9 overflow-hidden rounded-full bg-blue-500 transition-[width] duration-200 hover:w-[160px] hover:bg-gradient-to-r from-blue-500 to-indigo-600">
+                        <p class="text-white"><i class="fas fa-ellipsis-h"></i></p>
                         <ul class="absolute inset-0 flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0">
                             <li class="p-2 transition-opacity duration-200">
                             <a href="#" data-id="${item.id}" data-action="share" class="share-btn text-white/80 hover:text-blue-700 transition duration-150" aria-label="share">
