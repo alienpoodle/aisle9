@@ -324,31 +324,31 @@ function renderItemCards(items) {
                     </button>
                 </div>
                     <div class="group relative inline-block h-9 w-9 overflow-hidden rounded-full bg-blue-500 transition-[width] duration-200 hover:w-[160px] hover:bg-gradient-to-r from-blue-500 to-indigo-600">
-                        <p class="text-white"><i class="fas fa-ellipsis-h"></i></p>
-                        <ul class="absolute inset-0 flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0">
-                            <li class="p-2 transition-opacity duration-200">
-                                <a href="#" data-id="${item.id}" data-action="share" class="share-btn text-white/80 hover:text-blue-700 transition duration-150" aria-label="share">
-                                    <i class="fas fa-share-alt text-2xl"></i>
-                                </a>
+                    <p class="absolute inset-0 flex items-center justify-center text-white transition-opacity duration-200 group-hover:opacity-0"><i class="fas fa-ellipsis-h"></i></p>
+                        <ul class="absolute inset-0 flex translate-x-full items-center justify-center transition-transform duration-200 group-hover:translate-x-0">
+                            <li class="opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                            <a href="#" data-id="${item.id}" data-action="share" class="share-btn p-2 text-white/80 transition duration-150 hover:text-white" aria-label="share">
+                                <i class="fas fa-share-alt text-2xl"></i>
+                            </a>
                             </li>
 
                             <li class="opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                                <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
+                            <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
                             </li>
                             <li class="opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                                <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Duplicate">
-                                    <i class="fas fa-clone"></i>
-                                </a>
+                            <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Duplicate">
+                                <i class="fas fa-clone"></i>
+                            </a>
                             </li>
                             <li class="opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                                <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Delete">
-                                    <i class="fas fa-trash"></i>
-                                </a>
+                            <a href="#" class="p-2 text-white/80 transition-colors hover:text-white" data-tippy-content="Delete">
+                                <i class="fas fa-trash"></i>
+                            </a>
                             </li>
                         </ul>
-                    </div>              
+                    </div>            
             </div>
         `;
         itemCardsContainer.appendChild(itemCard);
